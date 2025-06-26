@@ -1,0 +1,72 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Vehicle Parking App
+{% endblock title %}
+
+{% block content %}
+
+<div class="container d-flex justify-content-center align-items-center landing-container">
+    <div class="custom-card text-center">
+        <h2 class="app-title mb-4">Vehicle Parking App</h2>
+        <p class="text-muted mb-4">Please select your login type</p>
+        <div class="d-grid gap-3">
+            <a href="{{ url_for('user_login') }}" class="btn btn-custom btn-user">User Login</a>
+            <a href="{{ url_for('admin_login') }}" class="btn btn-custom btn-admin">Admin Login</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background: linear-gradient(to right, #ADEED9, #FFEDF3);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .landing-container {
+        height: 100vh;
+    }
+
+    .custom-card {
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        min-width: 320px;
+        max-width: 400px;
+        width: 100%;
+    }
+
+    .app-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #000000;
+    }
+
+    .btn-custom {
+        font-size: 1.1rem;
+        padding: 0.75rem;
+        border-radius: 12px;
+        border: none;
+    }
+
+    .btn-user {
+        background-color: #56DFCF;
+        color: #000000;
+    }
+
+    .btn-user:hover {
+        background-color: #3dd7c2;
+    }
+
+    .btn-admin {
+        background-color: #FFEDF3;
+        color: #000000;
+    }
+
+    .btn-admin:hover {
+        background-color: #fcdde7;
+    }
+</style>
+
+{% endblock content %}

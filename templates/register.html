@@ -1,0 +1,76 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    User Registration
+{% endblock title %}
+
+{% block content %}
+
+<div class="container d-flex justify-content-center align-items-center register-container">
+    <div class="register-card text-center">
+        <h2 class="form-title mb-4">Create New Account</h2>
+        <form method="POST" action="{{ url_for('register') }}">
+            <div class="mb-3 text-start">
+                <label for="name" class="form-label">Full Name</label>
+                <input type="text" class="form-control" name="name" id="name" required>
+            </div>
+            <div class="mb-3 text-start">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" name="username" id="username" required>
+            </div>
+            <div class="mb-3 text-start">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" name="password" id="password" required>
+            </div>
+            <div class="mb-4 text-start">
+                <label for="confirm_password" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" name="confirm_password" id="confirm_password" required>
+            </div>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-register">Register</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    body {
+        background: linear-gradient(to right, #ADEED9, #FFEDF3);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .register-container {
+        height: 100vh;
+    }
+
+    .register-card {
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        min-width: 320px;
+        max-width: 450px;
+        width: 100%;
+    }
+
+    .form-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #000000;
+    }
+
+    .btn-register {
+        background-color: #56DFCF;
+        color: #000000;
+        font-size: 1.1rem;
+        padding: 0.75rem;
+        border-radius: 12px;
+        border: none;
+    }
+
+    .btn-register:hover {
+        background-color: #3dd7c2;
+    }
+</style>
+
+{% endblock content %}

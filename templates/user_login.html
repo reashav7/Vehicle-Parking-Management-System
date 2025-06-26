@@ -1,0 +1,81 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    User Login
+{% endblock title %}
+
+{% block content %}
+
+<div class="container d-flex justify-content-center align-items-center login-container">
+    <div class="login-card text-center">
+        <h2 class="form-title mb-4">User Login</h2>
+        <form method="POST" action="{{ url_for('user_login') }}">
+            <div class="mb-3 text-start">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" name="username" id="username" required>
+            </div>
+            <div class="mb-4 text-start">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" name="password" id="password" required>
+            </div>
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-custom btn-user-login">Log In</button>
+                <a href="{{ url_for('user_login') }}" class="btn btn-custom btn-user-register">Create New Account</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    body {
+        background: linear-gradient(to right, #ADEED9, #FFEDF3);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .login-container {
+        height: 100vh;
+    }
+
+    .login-card {
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        min-width: 320px;
+        max-width: 400px;
+        width: 100%;
+    }
+
+    .form-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #000000;
+    }
+
+    .btn-custom {
+        font-size: 1.1rem;
+        padding: 0.75rem;
+        border-radius: 12px;
+        border: none;
+    }
+
+    .btn-user-login {
+        background-color: #56DFCF;
+        color: #000000;
+    }
+
+    .btn-user-login:hover {
+        background-color: #3dd7c2;
+    }
+
+    .btn-user-register {
+        background-color: #FFEDF3;
+        color: #000000;
+    }
+
+    .btn-user-register:hover {
+        background-color: #fcdde7;
+    }
+</style>
+
+{% endblock content %}
