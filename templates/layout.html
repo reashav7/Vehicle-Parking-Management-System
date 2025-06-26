@@ -14,6 +14,60 @@
     {% endblock style %}
 </head>
 <body>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="container mt-4">
+            {% for category, message in messages %}
+                <div class="alert flash-alert alert-{{ category }} alert-dismissible fade show text-center" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+
+    <style>
+    .flash-alert {
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .alert-success {
+        background-color: #d1f7f2;
+        color: #087f71;
+        border: 1px solid #56DFCF;
+    }
+
+    .alert-danger {
+        background-color: #ffe6ec;
+        color: #b33a56;
+        border: 1px solid #FFEDF3;
+    }
+
+    .alert-warning {
+        background-color: #fff4db;
+        color: #946c00;
+        border: 1px solid #ffe9a3;
+    }
+
+    .alert-info {
+        background-color: #e0f0ff;
+        color: #004085;
+        border: 1px solid #91caff;
+    }
+
+    .btn-close {
+        margin-left: 0.5rem;
+    }
+    </style>
+
+    
     {% block content %}
     
     {% endblock content %}

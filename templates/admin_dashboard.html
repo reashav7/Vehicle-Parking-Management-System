@@ -1,0 +1,64 @@
+{% extends 'layout.html' %}
+
+{% block title %}Admin Dashboard{% endblock title %}
+
+{% block style %}
+<style>
+    body {
+        background: linear-gradient(to right, #ADEED9, #FFEDF3);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .dashboard-container {
+        min-height: 100vh;
+        padding: 2rem 0;
+    }
+    .dashboard-card {
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+    }
+    .dashboard-title {
+        font-weight: bold;
+        font-size: 2rem;
+        color: #000;
+    }
+    .btn-dashboard {
+        background-color: #FFEDF3;
+        color: #000;
+        border-radius: 12px;
+        font-weight: 500;
+    }
+    .btn-dashboard:hover {
+        background-color: #fdd3de;
+    }
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="container dashboard-container">
+    <div class="dashboard-card">
+        <h2 class="dashboard-title mb-4 text-center">Welcome, Admin</h2>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <a href="{{ url_for('index') }}" class="btn btn-dashboard w-100">Create Parking Lot</a>
+            </div>
+            <div class="col-md-6">
+                <a href="{{ url_for('index') }}" class="btn btn-dashboard w-100">Manage Parking Lots</a>
+            </div>
+            <div class="col-md-6">
+                <a href="{{ url_for('index') }}" class="btn btn-dashboard w-100">View Registered Users</a>
+            </div>
+            <div class="col-md-6">
+                <a href="{{ url_for('index') }}" class="btn btn-dashboard w-100">View Occupied Spots</a>
+            </div>
+            <div class="col-md-6">
+                <a href="{{ url_for('index') }}" class="btn btn-dashboard w-100">View Analytics</a>
+            </div>
+            <div class="col-md-6">
+                <a href="{{ url_for('index') }}" class="btn btn-danger w-100" style="border-radius: 12px;">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

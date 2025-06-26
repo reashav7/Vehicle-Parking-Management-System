@@ -1,6 +1,7 @@
 from app import app
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy(app)
 
@@ -9,7 +10,7 @@ class User(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(32), unique=True, nullable=False)
-    password_hash = db.Column(db.String(256), nullable=False)
+    passhash = db.Column(db.String(256), nullable=False)
     name = db.Column(db.String(64), nullable=False)
     is_admin = db.Column(db.Boolean, default=False, nullable=False)
     
@@ -54,4 +55,14 @@ class Reservation(db.Model):
     
 with app.app_context():
     db.create_all()
+    
+    # Create an admin user if it doesn't exist
+    admin = User.query.filter_by(is_admin=True).first()
+    
+    if not admin:
+        password_hash = generate_password_hash('admin12345')
+        
+        admin = User(username='admin', passhash=password_hash, name='Admin', is_admin=True)
+        db.session.add(admin)
+        db.session.commit()
     
