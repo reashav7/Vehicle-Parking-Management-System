@@ -1,0 +1,82 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Edit Parking Lot
+{% endblock title %}
+
+{% block navbar %}
+    {% include 'admin_navbar.html' %}
+{% endblock navbar %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center edit-lot-container">
+    <div class="edit-lot-card text-center">
+        <h2 class="form-title mb-4">Add New Parking Lot</h2>
+        <form method="POST" action="">
+            <div class="mb-3 text-start">
+                <label for="prime_location_name" class="form-label">Prime Location Name</label>
+                <input type="text" class="form-control" id="prime_location_name" name="prime_location_name" value="" required>
+            </div>
+            <div class="mb-3 text-start">
+                <label for="address" class="form-label">Address</label>
+                <input type="text" class="form-control" id="address" name="address" value="" required>
+            </div>
+            <div class="mb-3 text-start">
+                <label for="pin_code" class="form-label">PIN Code</label>
+                <input type="text" class="form-control" id="pin_code" name="pin_code" value="" required>
+            </div>
+            <div class="mb-3 text-start">
+                <label for="price_per_hour" class="form-label">Price per Hour (₹)</label>
+                <input type="number" class="form-control" id="price_per_hour" name="price_per_hour" value="" min="0" required>
+            </div>
+            <div class="mb-4 text-start">
+                <label for="maximum_spots" class="form-label">Maximum Spots</label>
+                <input type="number" class="form-control" id="maximum_spots" name="maximum_spots" value="" min="1" required>
+            </div>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-save">Add lot</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    body {
+        background: linear-gradient(to right, #ADEED9, #FFEDF3);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .edit-lot-container {
+        height: 100vh;
+    }
+
+    .edit-lot-card {
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        min-width: 320px;
+        max-width: 500px;
+        width: 100%;
+    }
+
+    .form-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #000000;
+    }
+
+    .btn-save {
+        background-color: #56DFCF;
+        color: #000000;
+        font-size: 1.1rem;
+        padding: 0.75rem;
+        border-radius: 12px;
+        border: none;
+    }
+
+    .btn-save:hover {
+        background-color: #3dd7c2;
+    }
+</style>
+{% endblock content %}

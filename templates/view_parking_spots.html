@@ -1,0 +1,126 @@
+{% extends 'layout.html' %}
+
+{% block navbar %}
+    {% include 'admin_navbar.html' %}
+{% endblock navbar %}
+
+{% block title %}Parking Lot Details{% endblock title %}
+
+{% block style %}
+<style>
+    body {
+        background: linear-gradient(to right, #ADEED9, #FFEDF3);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .lot-detail-container {
+        padding: 2rem;
+    }
+    .lot-detail-card {
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+    }
+    .lot-detail-title {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #000;
+        margin-bottom: 1rem;
+    }
+    .lot-detail-section {
+        margin-bottom: 1.5rem;
+    }
+    .lot-detail-section h5 {
+        font-weight: 600;
+        color: #333;
+    }
+    .lot-detail-section p {
+        margin: 0.25rem 0;
+        color: #555;
+    }
+    .btn-back {
+        background-color: #56DFCF;
+        color: #000;
+        border-radius: 12px;
+        padding: 0.5rem 1rem;
+        font-weight: 600;
+        text-decoration: none;
+    }
+    .btn-back:hover {
+        background-color: #3dd7c2;
+    }
+    .spot-list {
+        list-style-type: none;
+        padding-left: 0;
+    }
+    .spot-list li {
+        padding: 0.4rem;
+        margin-bottom: 0.3rem;
+        border-bottom: 1px solid #ddd;
+        color: #444;
+    }
+
+    .spot-box {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: #fff;
+    font-size: 0.9rem;
+    margin: auto;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.available {
+    background-color: #56DFCF;
+}
+
+.reserved {
+    background-color: #FF6B81;
+}
+
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="container lot-detail-container">
+    <div class="lot-detail-card">
+        <div class="lot-detail-title">Express Avenue</div>
+
+        <div class="lot-detail-section">
+            <h5>Address</h5>
+            <p>17, Pattullos Rd, Express Estate, Thousand Lights, Chennai, Tamil Nadu 600002</p>
+            <p><strong>PIN Code:</strong> 600002</p>
+        </div>
+
+        <div class="lot-detail-section">
+            <h5>Pricing</h5>
+            <p><strong>Price per Hour:</strong> ₹600</p>
+        </div>
+
+        <div class="lot-detail-section">
+            <h5>Parking Capacity</h5>
+            <p><strong>Total Spots:</strong> 120</p>
+        </div>
+
+        <div class="lot-detail-section">
+    <h5>Spots Overview</h5>
+    <div class="row gx-2 gy-2">
+        {% for i in range(1, 51) %}
+            <div class="col-3 col-sm-2 col-md-1 text-center">
+                <div class="spot-box {{ 'available' if i % 5 != 0  else 'reserved' }}">
+                    {{ i }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+        <a href="{{ url_for('admin_dashboard', user_id=1) }}" class="btn btn-back">Back to Dashboard</a>
+    </div>
+</div>
+{% endblock content %}

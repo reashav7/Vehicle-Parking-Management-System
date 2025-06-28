@@ -1,0 +1,89 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Profile
+{% endblock title %}
+
+{% block content %}
+
+<style>
+    body {
+        background: linear-gradient(to right, #ADEED9, #FFEDF3);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .register-container {
+        height: 100vh;
+    }
+
+    .register-card {
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 2.5rem;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        min-width: 320px;
+        max-width: 450px;
+        width: 100%;
+    }
+
+    .form-title {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #000000;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #333;
+    }
+
+    .form-control {
+        border-radius: 12px;
+        border: 1px solid #ccc;
+        padding: 0.6rem 1rem;
+    }
+
+    .btn-register {
+        background-color: #56DFCF;
+        color: #000;
+        font-weight: 600;
+        font-size: 1rem;
+        padding: 0.75rem;
+        border-radius: 12px;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-register:hover {
+        background-color: #3dd7c2;
+    }
+</style>
+
+<div class="container d-flex justify-content-center align-items-center register-container">
+    <div class="register-card text-center">
+        <h2 class="form-title mb-4">Edit Profile</h2>
+        <form method="POST" action="">
+            <div class="mb-3 text-start">
+                <label for="name" class="form-label">Full Name</label>
+                <input type="text" class="form-control" name="name" id="name" value="{{ user.name }}" required>
+            </div>
+            <div class="mb-3 text-start">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" name="username" id="username" value="{{ user.username }}" required>
+            </div>
+            <div class="mb-3 text-start">
+                <label for="cpassword" class="form-label">Current Password</label>
+                <input type="password" class="form-control" name="cpassword" id="cpassword" required>
+            </div>
+            <div class="mb-4 text-start">
+                <label for="password" class="form-label">New Password</label>
+                <input type="password" class="form-control" name="password" id="password" required>
+            </div>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-register">Update Profile</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}

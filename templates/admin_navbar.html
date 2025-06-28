@@ -1,0 +1,64 @@
+<style>
+  .btn-logout {
+    background-color: white;
+    color: #b33a56;
+    border: 2px solid #FFEDF3;
+    font-weight: 600;
+    border-radius: 50px;
+    padding: 0.5rem 1.5rem;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  .btn-logout:hover {
+    background-color: #ffe6ec;
+    color: #000;
+    border-color: #ffc6d3;
+  }
+
+  .navbar-gradient {
+    background: linear-gradient(to right, #ADEED9, #FFEDF3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .navbar-link {
+    font-weight: 500;
+    color: #000 !important;
+    transition: color 0.2s;
+  }
+
+  .navbar-link:hover {
+    color: #444 !important;
+  }
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-gradient">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold text-dark" href="#" style="font-size: 1.5rem;">Vehicle Parking App</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon" style="filter: brightness(0.5);"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+      <ul class="navbar-nav text-center">
+        <li class="nav-item">
+          <a class="nav-link navbar-link px-3" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link navbar-link px-3" href="#">Users</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link navbar-link px-3" href="#">Search</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link navbar-link px-3" href="#">Summary</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link navbar-link px-3" href="{{url_for('profile')}}">Edit Profile</a>
+        </li>
+      </ul>
+    </div>
+    <div class="d-flex">
+      <a class="btn btn-logout me-2" href="{{url_for('admin_logout')}}">Logout</a>
+    </div>
+  </div>
+</nav>

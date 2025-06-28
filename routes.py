@@ -103,6 +103,23 @@ def auth_required(func):
     return inner
 ##-------------------------------------------------------------##
 
+##-------------decorator for admin required--------------------##
+
+def admin_required(func):
+    @wraps(func)
+    def inner(*args, **kwargs):
+        if 'user_id' not in session:
+            flash('You need to log in first', 'danger')
+            return redirect(url_for('admin_login'))
+        user = User.query.get(session['user_id'])
+        if not user.is_admin:
+            flash('You do not have permission to access this page', 'danger')
+            return redirect(url_for('admin_login'))
+        return func(*args, **kwargs)
+    return inner
+
+##-------------------------------------------------------------##
+
 
 
 @app.route('/user-dashboard/<int:user_id>')
@@ -111,11 +128,177 @@ def user_dashboard(user_id):
         user = User.query.get(session['user_id'])
         return render_template('user_dashboard.html', user=user)
 
-@app.route('/admin-dashboard/<int:user_id>')
+    
+    
+@app.route('/user_dashboard/profile/')
 @auth_required
+def profile():
+    user = User.query.get(session['user_id'])
+    return render_template('profile.html', user = user)
+
+
+@app.route('/user_dashboard/profile/', methods=['POST'])
+@auth_required
+def profile_post():
+    name = request.form.get('name')
+    username = request.form.get('username')
+    cpassword = request.form.get('cpassword')
+    password = request.form.get('password')
+    
+    if not name or not username or not cpassword:
+        flash('All fields are required', 'danger')
+        return redirect(url_for('profile'))
+    
+    user = User.query.get(session['user_id'])
+    if not check_password_hash(user.passhash, cpassword):
+        flash('Current password is incorrect', 'danger')
+        return redirect(url_for('profile'))
+    
+    if username != user.username:
+        new_user = User.query.filter_by(username=username).first()
+        if new_user:
+            flash('Username already exists', 'danger')
+            return redirect(url_for('profile'))
+        
+    user.name = name
+    user.username = username
+    user.passhash = generate_password_hash(password)
+    db.session.commit()
+    flash('Profile updated successfully', 'success')
+    if user.is_admin:
+        return redirect(url_for('admin_dashboard', user_id=user.id))
+    else:
+        return redirect(url_for('user_dashboard', user_id=user.id))
+    
+    
+    
+
+
+@app.route('/user_dashboard/logout/')
+@auth_required
+def user_logout():
+    session.pop('user_id')
+    flash('You have been logged out', 'success')
+    return redirect(url_for('user_login'))
+
+@app.route('/admin_dashboard/logout/')
+@admin_required
+def admin_logout():
+    session.pop('user_id')
+    flash('You have been logged out', 'success')
+    return redirect(url_for('admin_login'))
+
+
+@app.route('/admin-dashboard/<int:user_id>')
+@admin_required
 def admin_dashboard(user_id):
         user = User.query.get(session['user_id'])
-        return render_template('admin_dashboard.html', user=user)
+        parking_lots = Parking_Lot.query.all()
+        return render_template('admin_dashboard.html', user=user, parking_lots=parking_lots)
+    
+    
+@app.route('/admin_dashboard/add_parking_lot')
+@admin_required
+def add_parking_lot():
+    return render_template('add_parking_lot.html')
+
+
+@app.route('/admin_dashboard/add_parking_lot', methods=['POST'])
+@admin_required
+def add_parking_lot_post():
+    prime_location_name = request.form.get('prime_location_name')
+    address = request.form.get('address')
+    pin_code = request.form.get('pin_code')
+    price_per_hour = request.form.get('price_per_hour')
+    maximum_spots = request.form.get('maximum_spots')
+    
+    if not prime_location_name or not address or not pin_code or not price_per_hour or not maximum_spots:
+        flash('All fields are required', 'danger')
+        return render_template('add_parking_lot.html')
+    
+    parking_lot = Parking_Lot(
+        prime_location_name=prime_location_name,
+        address=address,
+        pin_code=pin_code,
+        price_per_hour=float(price_per_hour),
+        maximum_spots=int(maximum_spots)
+    )
+    db.session.add(parking_lot)
+    db.session.commit()
+    
+    flash('Parking lot added successfully', 'success')
+    return redirect(url_for('admin_dashboard', user_id=session['user_id']))
+
+
+
+@app.route('/admin_dashboard/edit_parking_lot/<int:lot_id>')
+@admin_required
+def edit_parking_lot(lot_id):
+    parking_lot = Parking_Lot.query.get(lot_id)
+    if not parking_lot:
+        flash('Parking lot not found', 'danger')
+        return redirect(url_for('admin_dashboard', user_id=session['user_id']))
+    
+    return render_template('edit_parking_lot.html', parking_lot=parking_lot)
+
+
+@app.route('/admin_dashboard/edit_parking_lot/<int:lot_id>', methods=['POST'])
+@admin_required
+def edit_parking_lot_post(lot_id):
+    parking_lot = Parking_Lot.query.get(lot_id)
+    if not parking_lot:
+        flash('Parking lot not found', 'danger')
+        return redirect(url_for('admin_dashboard', user_id=session['user_id']))
+    
+    prime_location_name = request.form.get('prime_location_name')
+    address = request.form.get('address')
+    pin_code = request.form.get('pin_code')
+    price_per_hour = request.form.get('price_per_hour')
+    maximum_spots = request.form.get('maximum_spots')
+    
+    if not prime_location_name or not address or not pin_code or not price_per_hour or not maximum_spots:
+        flash('All fields are required', 'danger')
+        return redirect(url_for('edit_parking_lot', lot_id=lot_id))
+    
+    parking_lot.prime_location_name = prime_location_name
+    parking_lot.address = address
+    parking_lot.pin_code = pin_code
+    parking_lot.price_per_hour = float(price_per_hour)
+    parking_lot.maximum_spots = int(maximum_spots)
+    
+    db.session.commit()
+    
+    flash('Parking lot updated successfully', 'success')
+    return redirect(url_for('admin_dashboard', user_id=session['user_id']))
+
+
+
+@app.route('/admin_dashboard/delete_parking_lot/<int:lot_id>', methods=['POST'])
+@admin_required
+def delete_parking_lot(lot_id):
+    parking_lot = Parking_Lot.query.get(lot_id)
+    if not parking_lot:
+        flash('Parking lot not found', 'danger')
+        return redirect(url_for('admin_dashboard', user_id=session['user_id']))
+    
+    db.session.delete(parking_lot)
+    db.session.commit()
+    
+    flash('Parking lot deleted successfully', 'success')
+    return redirect(url_for('admin_dashboard', user_id=session['user_id']))
+
+
+
+@app.route('/admin_dashboard/view_parking_spots/<int:lot_id>')
+@admin_required
+def view_parking_spots(lot_id):
+    parking_lot = Parking_Lot.query.get(lot_id)
+    if not parking_lot:
+        flash('Parking lot not found', 'danger')
+        return redirect(url_for('admin_dashboard', user_id=session['user_id']))
+    
+    parking_spots = Parking_Spot.query.filter_by(lot_id=lot_id).all()
+    return render_template('view_parking_spots.html', parking_lot=parking_lot, parking_spots=parking_spots)
     
 
 
