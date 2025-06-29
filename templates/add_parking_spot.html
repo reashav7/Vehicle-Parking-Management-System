@@ -1,0 +1,78 @@
+{% extends 'layout.html' %}
+
+{% block title %}Add Parking Spots{% endblock title %}
+
+{% block navbar %}
+    {% include 'admin_navbar.html' %}
+{% endblock navbar %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center add-spot-container">
+    <div class="add-spot-card text-center">
+        <h2 class="form-title mb-4">Add Parking Spot(s)</h2>
+        <form method="POST">
+            <div class="mb-3 text-start">
+                <label for="num_spots" class="form-label">How many new spots do you want to add?</label>
+                <input type="number" class="form-control" id="num_spots" name="num_spots" placeholder="Enter number of spots" min="1" required>
+            </div>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-add">Add Spot(s)</button>
+            </div>
+        </form>
+        <a href="{{ url_for('view_parking_spots', lot_id=parking_lot.id) }}" class="btn btn-back mt-3">Back to Parking Lot</a>
+    </div>
+</div>
+
+<style>
+    body {
+        background: linear-gradient(to right, #ADEED9, #FFEDF3);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .add-spot-container {
+        height: 100vh;
+    }
+
+    .add-spot-card {
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        min-width: 320px;
+        max-width: 500px;
+        width: 100%;
+    }
+
+    .form-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #000000;
+    }
+
+    .btn-add {
+        background-color: #FFEDF3;
+        color: #000;
+        font-size: 1.1rem;
+        padding: 0.75rem;
+        border-radius: 12px;
+        border: none;
+    }
+
+    .btn-add:hover {
+        background-color: #fcdde7;
+    }
+
+    .btn-back {
+        background-color: #56DFCF;
+        color: #000;
+        padding: 0.5rem 1rem;
+        border-radius: 12px;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-back:hover {
+        background-color: #3dd7c2;
+    }
+</style>
+{% endblock content %}

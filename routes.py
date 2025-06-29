@@ -273,6 +273,21 @@ def edit_parking_lot_post(lot_id):
 
 
 
+# @app.route('/admin_dashboard/delete_parking_lot/<int:lot_id>', methods=['POST'])
+# @admin_required
+# def delete_parking_lot(lot_id):
+#     parking_lot = Parking_Lot.query.get(lot_id)
+#     if not parking_lot:
+#         flash('Parking lot not found', 'danger')
+#         return redirect(url_for('admin_dashboard', user_id=session['user_id']))
+    
+#     db.session.delete(parking_lot)
+#     db.session.commit()
+    
+#     flash('Parking lot deleted successfully', 'success')
+#     return redirect(url_for('admin_dashboard', user_id=session['user_id']))
+
+
 @app.route('/admin_dashboard/delete_parking_lot/<int:lot_id>', methods=['POST'])
 @admin_required
 def delete_parking_lot(lot_id):
@@ -281,11 +296,23 @@ def delete_parking_lot(lot_id):
         flash('Parking lot not found', 'danger')
         return redirect(url_for('admin_dashboard', user_id=session['user_id']))
     
+    # Check if any spot is occupied
+    occupied_spots = Parking_Spot.query.filter_by(lot_id=lot_id, status='R').count()
+    
+    if occupied_spots > 0:
+        flash('Cannot delete parking lot. Some spots are still reserved.', 'danger')
+        return redirect(url_for('admin_dashboard', user_id=session['user_id']))
+
+    # Delete all spots related to the lot
+    Parking_Spot.query.filter_by(lot_id=lot_id).delete()
+
+    # Delete the parking lot
     db.session.delete(parking_lot)
     db.session.commit()
-    
-    flash('Parking lot deleted successfully', 'success')
+
+    flash('Parking lot and all associated available spots deleted successfully.', 'success')
     return redirect(url_for('admin_dashboard', user_id=session['user_id']))
+
 
 
 
@@ -297,9 +324,90 @@ def view_parking_spots(lot_id):
         flash('Parking lot not found', 'danger')
         return redirect(url_for('admin_dashboard', user_id=session['user_id']))
     
-    parking_spots = Parking_Spot.query.filter_by(lot_id=lot_id).all()
-    return render_template('view_parking_spots.html', parking_lot=parking_lot, parking_spots=parking_spots)
+    return render_template('view_parking_spots.html', parking_lot=parking_lot, parking_spots=parking_lot.parking_spots)
+
+
+
+
+
+@app.route('/admin_dashboard/add_parking_spot/<int:lot_id>', methods=['GET', 'POST'])
+@admin_required
+def add_parking_spot(lot_id):
+    parking_lot = Parking_Lot.query.get(lot_id)
+    if not parking_lot:
+        flash('Parking lot not found', 'danger')
+        return redirect(url_for('admin_dashboard', user_id=session['user_id']))
+
+    if request.method == 'POST':
+        num_spots = request.form.get('num_spots')
+        try:
+            num_spots = int(num_spots)
+            if num_spots <= 0:
+                flash('Please enter a positive number', 'danger')
+                return render_template('add_parking_spot.html', parking_lot=parking_lot)
+
+            current_spot_count = Parking_Spot.query.filter_by(lot_id=lot_id).count()
+            if current_spot_count + num_spots > parking_lot.maximum_spots:
+                flash(f'Cannot add {num_spots} spot(s). Lot can only have {parking_lot.maximum_spots - current_spot_count} more.', 'danger')
+                return render_template('add_parking_spot.html', parking_lot=parking_lot)
+
+            for _ in range(num_spots):
+                new_spot = Parking_Spot(lot_id=lot_id, status='A')  # Default to available
+                db.session.add(new_spot)
+
+            db.session.commit()
+            flash(f'{num_spots} parking spot(s) added successfully.', 'success')
+            return redirect(url_for('view_parking_spots', lot_id=lot_id))
+
+        except ValueError:
+            flash('Please enter a valid number', 'danger')
+
+    return render_template('add_parking_spot.html', parking_lot=parking_lot)
+
+
+
+@app.route('/admin_dashboard/parking_spot/<int:spot_id>')
+@admin_required
+def parking_spot(spot_id):
+    spot = Parking_Spot.query.get(spot_id)
+    if not spot:
+        flash("Parking spot not found", "danger")
+        return redirect(url_for('admin_dashboard', user_id=session['user_id']))
+
+    return render_template('parking_spot.html', spot=spot)
+
+
+
+@app.route('/admin_dashboard/delete_parking_spot/<int:spot_id>', methods=['POST'])
+@admin_required
+def delete_parking_spot(spot_id):
+    spot = Parking_Spot.query.get(spot_id)
+    if not spot:
+        flash('Parking spot not found', 'danger')
+        return redirect(url_for('admin_dashboard', user_id=session['user_id']))
     
+    lot_id = spot.lot_id
+    db.session.delete(spot)
+    db.session.commit()
+    flash(f"Spot #{spot_id} deleted successfully", "success")
+    return redirect(url_for('view_parking_spots', lot_id=lot_id))
+
+
+
+
+
+@app.route('/admin_dashboard/users')
+@admin_required
+def users_list():
+    dummy_users = [
+        User(name="Alice Singh", username="alice123", is_admin=False),
+        User(name="Bob Sharma", username="bob456", is_admin=False),
+        User(name="Charlie Admin", username="charlie_admin", is_admin=True),
+    ]
+    return render_template('users_list.html', users=dummy_users)
+
+
+
 
 
     

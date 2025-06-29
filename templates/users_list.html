@@ -1,0 +1,90 @@
+{% extends 'layout.html' %}
+
+{% block title %}All Users{% endblock title %}
+
+{% block navbar %}
+    {% include 'admin_navbar.html' %}
+{% endblock navbar %}
+
+{% block style %}
+<style>
+    body {
+        background: linear-gradient(to right, #ADEED9, #FFEDF3);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .users-container {
+        padding: 2rem;
+    }
+    .users-card {
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+    }
+    .users-card h2 {
+        font-size: 1.8rem;
+        font-weight: bold;
+        margin-bottom: 1.5rem;
+        color: #333;
+    }
+    .user-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .user-table th,
+    .user-table td {
+        padding: 0.75rem 1rem;
+        text-align: left;
+        border-bottom: 1px solid #ccc;
+    }
+    .user-table th {
+        background-color: #56DFCF;
+        color: #000;
+    }
+    .user-table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+    .btn-back {
+        margin-top: 2rem;
+        background-color: #56DFCF;
+        color: #000;
+        border-radius: 12px;
+        padding: 0.5rem 1rem;
+        font-weight: 600;
+        text-decoration: none;
+    }
+    .btn-back:hover {
+        background-color: #3dd7c2;
+    }
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="container users-container">
+    <div class="users-card">
+        <h2>Registered Users</h2>
+        <table class="user-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Admin</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ 'Yes' if user.is_admin else 'No' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="{{ url_for('admin_dashboard', user_id=session['user_id']) }}" class="btn btn-back">← Back to Dashboard</a>
+    </div>
+</div>
+{% endblock content %}
