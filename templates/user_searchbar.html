@@ -1,0 +1,49 @@
+<!-- searchbar.html -->
+<style>
+  .search-container {
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+  }
+
+  .search-input {
+    border: 2px solid #ADEED9;
+    border-radius: 12px;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 500px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+
+  .search-input:focus {
+    border-color: #56DFCF;
+  }
+
+  .btn-search {
+    background-color: #FFEDF3;
+    border: none;
+    border-radius: 12px;
+    padding: 0.5rem 1.2rem;
+    margin-left: 0.5rem;
+    font-weight: 600;
+    color: #000;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-search:hover {
+    background-color: #fcdde7;
+  }
+</style>
+
+<div class="search-container d-flex flex-column align-items-center">
+  <form method="GET" action="{{ url_for('user_dashboard', user_id=user_id) }}" class="d-flex w-100 justify-content-center">
+    <input type="text" name="query" placeholder="Search for location, area, or PIN..." class="search-input">
+    <button type="submit" class="btn btn-search">
+      <i class="fa-solid fa-magnifying-glass"></i> Search
+    </button>
+  </form>
+</div>

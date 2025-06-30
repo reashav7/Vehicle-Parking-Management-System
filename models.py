@@ -38,6 +38,8 @@ class Parking_Spot(db.Model):
     
     reservations = db.relationship('Reservation', backref='parking_spot', lazy=True)
     
+    
+    
 class Reservation(db.Model):
     __tablename__ = 'reservation'
     
@@ -46,10 +48,12 @@ class Reservation(db.Model):
     spot_id = db.Column(db.Integer, db.ForeignKey('parking_spot.id'), nullable=False)
     date = db.Column(db.Date, nullable=False)
     start_time = db.Column(db.DateTime, default=datetime.utcnow)
-    end_time = db.Column(db.DateTime, nullable=False)
-    hours_parked = db.Column(db.Integer, nullable=False)
+    end_time = db.Column(db.DateTime, nullable=True)
+    vehicle_number = db.Column(db.String(15), nullable=False)
+    hours_parked = db.Column(db.Float, nullable=False)
     parking_cost_per_hour = db.Column(db.Float, nullable=False)
     total_parking_cost = db.Column(db.Float, nullable=False)
+    
     
     
     

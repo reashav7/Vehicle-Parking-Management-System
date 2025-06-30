@@ -1,0 +1,96 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Release Parking Spot
+{% endblock title %}
+
+{% block navbar %}
+    {% include 'user_navbar.html' %}
+{% endblock navbar %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center book-container">
+    <div class="book-card text-center">
+        <h2 class="form-title mb-4 text-danger">Release Parking Spot</h2>
+        <form method="POST" action="">
+            <div class="mb-3 text-start">
+                <label class="form-label">Lot Name</label>
+                <input type="text" class="form-control" name="lot_name" value="{{ lot.prime_location_name }}" readonly>
+            </div>
+            <div class="mb-3 text-start">
+                <label class="form-label">Lot ID</label>
+                <input type="text" class="form-control" name="lot_id" value="{{ lot.id }}" readonly>
+            </div>
+            <div class="mb-3 text-start">
+                <label class="form-label">Spot ID</label>
+                <input type="text" class="form-control" name="spot_id" value="{{ spot.id }}" readonly>
+            </div>
+            <div class="mb-3 text-start">
+                <label class="form-label">Vehicle Number</label>
+                <input type="text" class="form-control" name="vehicle_number" value="{{ reservation.vehicle_number }}" readonly>
+            </div>
+            <div class="mb-3 text-start">
+                <label class="form-label">Start Time</label>
+                <input type="text" class="form-control" name="start_time" value="{{ reservation.start_time.strftime('%d-%m-%Y %I:%M %p') }}" readonly>
+            </div>
+            <div class="mb-3 text-start">
+                <label class="form-label">End Time</label>
+                <input type="text" class="form-control" name="end_time" value="{{ simulated_end_time.strftime('%d-%m-%Y %I:%M %p') }}" readonly>
+
+            </div>
+            <div class="mb-3 text-start">
+                <label class="form-label">Price per Hour</label>
+                <input type="text" class="form-control" name="price_per_hour" value="₹{{ lot.price_per_hour }}" readonly>
+            </div>
+            <div class="mb-4 text-start">
+                <label class="form-label">Total Cost</label>
+                <input type="text" class="form-control" name="total_cost" value="₹{{ total_cost }}" readonly>
+            </div>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-save text-danger">Confirm Release</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<style>
+    body {
+        background: linear-gradient(to right, #ADEED9, #FFEDF3);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .book-container {
+        height: 100vh;
+    }
+
+    .book-card {
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        min-width: 320px;
+        max-width: 500px;
+        width: 100%;
+    }
+
+    .form-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #000000;
+    }
+
+    .btn-save {
+        background-color: #56DFCF;
+        color: #000000;
+        font-size: 1.1rem;
+        padding: 0.75rem;
+        border-radius: 12px;
+        border: none;
+    }
+
+    .btn-save:hover {
+        background-color: #3dd7c2;
+    }
+</style>
+{% endblock content %}

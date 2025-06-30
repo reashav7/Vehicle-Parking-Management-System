@@ -59,8 +59,16 @@
             {% if spot.reservations %}
                 {% set current_reservation = spot.reservations[-1] %}
                 <p><strong>Reserved By:</strong> {{ current_reservation.user.name }} ({{ current_reservation.user.username }})</p>
+                <p><strong>Vehicle Number:</strong> {{ current_reservation.vehicle_number }}</p>
                 <p><strong>From:</strong> {{ current_reservation.start_time.strftime('%d-%m-%Y %I:%M %p') }}</p>
-                <p><strong>To:</strong> {{ current_reservation.end_time.strftime('%d-%m-%Y %I:%M %p') }}</p>
+                <p><strong>To:</strong>
+  {% if current_reservation.end_time %}
+    {{ current_reservation.end_time.strftime('%d-%m-%Y %I:%M %p') }}
+  {% else %}
+    Ongoing
+  {% endif %}
+</p>
+
                 <p><strong>Total Cost:</strong> ₹{{ current_reservation.total_parking_cost }}</p>
             {% else %}
                 <p class="text-muted">No active reservation found.</p>

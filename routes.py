@@ -3,6 +3,12 @@ from app import app
 from models import db, User, Parking_Lot, Parking_Spot, Reservation
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
+from sqlalchemy import or_, case
+from datetime import datetime, timedelta
+
+import pytz
+from flask_login import login_required
+from sqlalchemy.orm import joinedload
 
 @app.route('/')
 def index():
@@ -120,15 +126,7 @@ def admin_required(func):
 
 ##-------------------------------------------------------------##
 
-
-
-@app.route('/user-dashboard/<int:user_id>')
-@auth_required
-def user_dashboard(user_id):
-        user = User.query.get(session['user_id'])
-        return render_template('user_dashboard.html', user=user)
-
-    
+  
     
 @app.route('/user_dashboard/profile/')
 @auth_required
@@ -399,23 +397,219 @@ def delete_parking_spot(spot_id):
 @app.route('/admin_dashboard/users')
 @admin_required
 def users_list():
-    dummy_users = [
-        User(name="Alice Singh", username="alice123", is_admin=False),
-        User(name="Bob Sharma", username="bob456", is_admin=False),
-        User(name="Charlie Admin", username="charlie_admin", is_admin=True),
-    ]
-    return render_template('users_list.html', users=dummy_users)
+    users = User.query.all()
+
+    user_data = []
+    for user in users:
+        # Fetch all distinct vehicle numbers used by this user
+        reservations = Reservation.query.filter_by(user_id=user.id).all()
+        vehicle_numbers = list({r.vehicle_number for r in reservations})  # Use set to remove duplicates
+        
+        if vehicle_numbers:
+            vehicle_display = ", ".join(vehicle_numbers)
+        else:
+            vehicle_display = "NA"
+
+        user_data.append({
+            'name': user.name,
+            'username': user.username,
+            'is_admin': user.is_admin,
+            'vehicle_numbers': vehicle_display
+        })
+
+    return render_template('users_list.html', users=user_data)
 
 
 
 
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+##----------------------user dashboard----------------------##
+
+# @app.route('/user-dashboard/<int:user_id>')
+# @auth_required
+# def user_dashboard(user_id):
+#         user = User.query.get(session['user_id'])
+#         return render_template('user_dashboard.html', user=user)
+
+
+
+
+
+@app.route('/user-dashboard/<int:user_id>')
+@auth_required
+def user_dashboard(user_id):
+    user = User.query.get_or_404(session['user_id'])
+
+    recent_reservations = Reservation.query.options(
+        joinedload(Reservation.parking_spot).joinedload(Parking_Spot.parking_lot)
+    ).filter_by(user_id=user.id).order_by(
+        case((Reservation.end_time == None, 0), else_=1),
+        Reservation.start_time.desc()
+    ).all()
+
+    query = request.args.get("query")
+
+    if query:
+        matching_lots = Parking_Lot.query.filter(
+            or_(
+                Parking_Lot.prime_location_name.ilike(f"%{query}%"),
+                Parking_Lot.address.ilike(f"%{query}%"),
+                Parking_Lot.pin_code.ilike(f"%{query}%")
+            )
+        ).all()
+
+        if not matching_lots:
+            flash(f"No parking lots found matching: '{query}'", "warning")
+
+        matching_ids = [lot.id for lot in matching_lots]
+        remaining_lots = Parking_Lot.query.filter(
+            ~Parking_Lot.id.in_(matching_ids)
+        ).all()
+
+        parking_lots = matching_lots + remaining_lots
+    else:
+        parking_lots = Parking_Lot.query.all()
+
+    for lot in parking_lots:
+        lot.available_spots_count = Parking_Spot.query.filter_by(lot_id=lot.id, status='A').count()
+
+    return render_template(
+        'user_dashboard.html',
+        user=user,
+        user_id=user.id,
+        recent_reservations=recent_reservations,
+        parking_lots=parking_lots,
+        scroll_to_search=True if query else False
+    )
+
+
+
+
+
+# # View Single Lot (Optional, if you need a user-level lot details page)
+# @app.route('/lot/<int:lot_id>')
+# @auth_required
+# def view_single_lot(lot_id):
+#     parking_lot = Parking_Lot.query.get(lot_id)
+#     if not parking_lot:
+#         flash("Parking lot not found", "danger")
+#         return redirect(url_for('user_dashboard', user_id=session['user_id']))
+
+#     return render_template('user_lot_detail.html', parking_lot=parking_lot)
+
+
+
+
+
+
+@app.route('/user_dashboard/book/<int:lot_id>', methods=['GET', 'POST'])
+@auth_required
+def book_parking_spot(lot_id):
+    lot = Parking_Lot.query.get_or_404(lot_id)
+    user = User.query.get(session['user_id'])
+
+    # Get the first available spot in both GET and POST
+    spot = Parking_Spot.query.filter_by(lot_id=lot_id, status='A').first()
+
+    if request.method == 'POST':
+        vehicle_number = request.form.get('vehicle_number')
+        spot_id = request.form.get('spot_id')
+
+        if not vehicle_number:
+            flash("Please enter your vehicle number.", "danger")
+            return render_template('book_parking_spot.html', lot=lot, user=user, spot=spot)
+
+        if not spot:
+            flash("No available spots in this parking lot.", "danger")
+            return redirect(url_for('user_dashboard', user_id=user.id))
+
+        # Extra check to ensure spot isn't already taken
+        if spot.status != 'A':
+            flash("Selected spot is no longer available.", "danger")
+            return redirect(url_for('user_dashboard', user_id=user.id))
+
+        # Reserve spot
+        spot.status = 'R'
+        db.session.commit()
+
+        ist = pytz.timezone('Asia/Kolkata')
+        now = datetime.now(ist)
+        reservation = Reservation(
+            user_id=user.id,
+            spot_id=spot.id,
+            date=now.date(),
+            start_time=now,
+            end_time=None,  # You may want to let the user input end time later
+            vehicle_number=vehicle_number,
+            hours_parked=0,
+            parking_cost_per_hour=lot.price_per_hour,
+            total_parking_cost=0.0
+)
+
+
+        db.session.add(reservation)
+        db.session.commit()
+
+        flash(f"Spot #{spot.id} booked successfully!", "success")
+        return redirect(url_for('user_dashboard', user_id=user.id))
+
+    return render_template('book_parking_spot.html', lot=lot, user=user, spot=spot)
+
+
+
+
+@app.route('/user_dashboard/release/<int:reservation_id>', methods=['GET', 'POST'])
+@auth_required
+def release_parking_spot(reservation_id):
+    user_id = session.get('user_id')
+    reservation = Reservation.query.get_or_404(reservation_id)
+
+    if reservation.user_id != user_id:
+        flash("You do not have permission to release this reservation.", "danger")
+        return redirect(url_for('user_dashboard', user_id=user_id))
+
+    spot = Parking_Spot.query.get(reservation.spot_id)
+    if not spot:
+        flash("Associated parking spot not found.", "danger")
+        return redirect(url_for('user_dashboard', user_id=user_id))
+
+    lot = spot.parking_lot
+
+    if reservation.end_time:
+        flash("This parking reservation is already marked as completed.", "warning")
+        return redirect(url_for('user_dashboard', user_id=user_id))
+
+    ist = pytz.timezone("Asia/Kolkata")
+    current_time = datetime.now(ist)
+
+    # Convert reservation.start_time to timezone-aware if it's naive
+    if reservation.start_time.tzinfo is None or reservation.start_time.tzinfo.utcoffset(reservation.start_time) is None:
+        start_time_aware = ist.localize(reservation.start_time)
+    else:
+        start_time_aware = reservation.start_time
+
+    duration = current_time - start_time_aware
+    hours = round(duration.total_seconds() / 3600, 2)
+    hours = max(hours, 1)
+
+    if request.method == 'POST':
+        reservation.end_time = current_time
+        reservation.hours_parked = hours
+        reservation.total_parking_cost = hours * reservation.parking_cost_per_hour
+
+        spot.status = 'A'
+
+        db.session.commit()
+
+        flash(f"Spot #{spot.id} released successfully. Total cost: ₹{reservation.total_parking_cost:.2f}", "success")
+        return redirect(url_for('user_dashboard', user_id=user_id))
+
+    return render_template(
+        'release_parking_spot.html',
+        reservation=reservation,
+        lot=lot,
+        spot=spot,
+        simulated_end_time=current_time,
+        total_cost=hours * reservation.parking_cost_per_hour
+    )
