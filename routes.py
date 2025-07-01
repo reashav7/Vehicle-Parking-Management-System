@@ -10,6 +10,13 @@ import pytz
 from flask_login import login_required
 from sqlalchemy.orm import joinedload
 
+
+
+import io
+import base64
+import matplotlib.pyplot as plt
+import os
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -541,7 +548,6 @@ def book_parking_spot(lot_id):
             flash("No available spots in this parking lot.", "danger")
             return redirect(url_for('user_dashboard', user_id=user.id))
 
-        # Extra check to ensure spot isn't already taken
         if spot.status != 'A':
             flash("Selected spot is no longer available.", "danger")
             return redirect(url_for('user_dashboard', user_id=user.id))
@@ -557,7 +563,7 @@ def book_parking_spot(lot_id):
             spot_id=spot.id,
             date=now.date(),
             start_time=now,
-            end_time=None,  # You may want to let the user input end time later
+            end_time=None,  
             vehicle_number=vehicle_number,
             hours_parked=0,
             parking_cost_per_hour=lot.price_per_hour,
@@ -666,7 +672,6 @@ def reservation_history(user_id):
         now_ist=now_ist
     )
     
-
 
 
 
