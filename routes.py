@@ -192,13 +192,16 @@ def admin_logout():
 def admin_dashboard(user_id):
         user = User.query.get(session['user_id'])
         parking_lots = Parking_Lot.query.all()
-        return render_template('admin_dashboard.html', user=user, parking_lots=parking_lots)
+        return render_template('admin_dashboard.html', user=user, parking_lots=parking_lots, name=user.name, username=user.username)
+    
+    
     
     
 @app.route('/admin_dashboard/add_parking_lot')
 @admin_required
 def add_parking_lot():
     return render_template('add_parking_lot.html')
+
 
 
 @app.route('/admin_dashboard/add_parking_lot', methods=['POST'])
@@ -209,23 +212,39 @@ def add_parking_lot_post():
     pin_code = request.form.get('pin_code')
     price_per_hour = request.form.get('price_per_hour')
     maximum_spots = request.form.get('maximum_spots')
-    
+
     if not prime_location_name or not address or not pin_code or not price_per_hour or not maximum_spots:
         flash('All fields are required', 'danger')
         return render_template('add_parking_lot.html')
-    
+
+    try:
+        price_per_hour = float(price_per_hour)
+        maximum_spots = int(maximum_spots)
+    except ValueError:
+        flash("Invalid input for price or maximum spots", "danger")
+        return render_template('add_parking_lot.html')
+
+    # Create new parking lot
     parking_lot = Parking_Lot(
         prime_location_name=prime_location_name,
         address=address,
         pin_code=pin_code,
-        price_per_hour=float(price_per_hour),
-        maximum_spots=int(maximum_spots)
+        price_per_hour=price_per_hour,
+        maximum_spots=maximum_spots
     )
     db.session.add(parking_lot)
+    db.session.commit()  # Commit first to get lot.id
+
+    # Automatically create 80% of max spots (rounded down)
+    auto_spots = int(maximum_spots * 0.8)
+    for _ in range(auto_spots):
+        spot = Parking_Spot(lot_id=parking_lot.id, status='A')  # 'A' for Available
+        db.session.add(spot)
     db.session.commit()
-    
-    flash('Parking lot added successfully', 'success')
+
+    flash(f'Parking lot added with {auto_spots} spot(s) initialized.', 'success')
     return redirect(url_for('admin_dashboard', user_id=session['user_id']))
+
 
 
 
@@ -271,19 +290,7 @@ def edit_parking_lot_post(lot_id):
 
 
 
-# @app.route('/admin_dashboard/delete_parking_lot/<int:lot_id>', methods=['POST'])
-# @admin_required
-# def delete_parking_lot(lot_id):
-#     parking_lot = Parking_Lot.query.get(lot_id)
-#     if not parking_lot:
-#         flash('Parking lot not found', 'danger')
-#         return redirect(url_for('admin_dashboard', user_id=session['user_id']))
-    
-#     db.session.delete(parking_lot)
-#     db.session.commit()
-    
-#     flash('Parking lot deleted successfully', 'success')
-#     return redirect(url_for('admin_dashboard', user_id=session['user_id']))
+
 
 
 @app.route('/admin_dashboard/delete_parking_lot/<int:lot_id>', methods=['POST'])
@@ -422,17 +429,41 @@ def users_list():
 
 
 
+@app.route('/admin_dashboard/reservation-history')
+@admin_required
+def admin_reservation_history():
+    all_reservations = Reservation.query.options(
+        joinedload(Reservation.parking_spot).joinedload(Parking_Spot.parking_lot),
+        joinedload(Reservation.user)
+    ).order_by(
+        case((Reservation.end_time == None, 0), else_=1),
+        Reservation.start_time.desc()
+    ).all()
+
+    ist = pytz.timezone("Asia/Kolkata")
+    now_ist = datetime.now(ist)
+
+    for res in all_reservations:
+        if res.start_time.tzinfo is None:
+            res.start_time = ist.localize(res.start_time)
+        if res.end_time and res.end_time.tzinfo is None:
+            res.end_time = ist.localize(res.end_time)
+
+    return render_template(
+        'admin_reservation_history.html',
+        all_reservations=all_reservations,
+        now_ist=now_ist
+    )
+    
+    
+    
+    
+
+
+
 
 
 ##----------------------user dashboard----------------------##
-
-# @app.route('/user-dashboard/<int:user_id>')
-# @auth_required
-# def user_dashboard(user_id):
-#         user = User.query.get(session['user_id'])
-#         return render_template('user_dashboard.html', user=user)
-
-
 
 
 
@@ -446,7 +477,7 @@ def user_dashboard(user_id):
     ).filter_by(user_id=user.id).order_by(
         case((Reservation.end_time == None, 0), else_=1),
         Reservation.start_time.desc()
-    ).all()
+    ).limit(3).all()
 
     query = request.args.get("query")
 
@@ -478,26 +509,12 @@ def user_dashboard(user_id):
         'user_dashboard.html',
         user=user,
         user_id=user.id,
+        name=user.name,
+        username=user.username,
         recent_reservations=recent_reservations,
         parking_lots=parking_lots,
         scroll_to_search=True if query else False
     )
-
-
-
-
-
-# # View Single Lot (Optional, if you need a user-level lot details page)
-# @app.route('/lot/<int:lot_id>')
-# @auth_required
-# def view_single_lot(lot_id):
-#     parking_lot = Parking_Lot.query.get(lot_id)
-#     if not parking_lot:
-#         flash("Parking lot not found", "danger")
-#         return redirect(url_for('user_dashboard', user_id=session['user_id']))
-
-#     return render_template('user_lot_detail.html', parking_lot=parking_lot)
-
 
 
 
@@ -592,6 +609,9 @@ def release_parking_spot(reservation_id):
     duration = current_time - start_time_aware
     hours = round(duration.total_seconds() / 3600, 2)
     hours = max(hours, 1)
+    duration_minutes = int(duration.total_seconds() // 60)
+    duration_str = f"{duration_minutes // 60} hr {duration_minutes % 60} min"
+
 
     if request.method == 'POST':
         reservation.end_time = current_time
@@ -611,5 +631,47 @@ def release_parking_spot(reservation_id):
         lot=lot,
         spot=spot,
         simulated_end_time=current_time,
-        total_cost=hours * reservation.parking_cost_per_hour
+        total_cost=hours * reservation.parking_cost_per_hour,
+        duration_str=duration_str
     )
+    
+    
+
+@app.route('/user_dashboard/reservation-history/<int:user_id>')
+@auth_required
+def reservation_history(user_id):
+    user = User.query.get_or_404(session['user_id'])
+
+    all_reservations = Reservation.query.options(
+        joinedload(Reservation.parking_spot).joinedload(Parking_Spot.parking_lot)
+    ).filter_by(user_id=user.id).order_by(
+        case((Reservation.end_time == None, 0), else_=1),
+        Reservation.start_time.desc()
+    ).all()
+
+    ist = pytz.timezone("Asia/Kolkata")
+    now_ist = datetime.now(ist)
+
+    # Convert naive start times to timezone-aware
+    for res in all_reservations:
+        if res.start_time.tzinfo is None:
+            res.start_time = ist.localize(res.start_time)
+        if res.end_time and res.end_time.tzinfo is None:
+            res.end_time = ist.localize(res.end_time)
+
+    return render_template(
+        'reservation_history.html',
+        user=user,
+        all_reservations=all_reservations,
+        now_ist=now_ist
+    )
+    
+
+
+
+
+
+
+
+
+

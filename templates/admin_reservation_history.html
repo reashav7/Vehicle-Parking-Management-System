@@ -1,0 +1,128 @@
+{% extends 'layout.html' %}
+
+{% block navbar %}
+    {% include 'admin_navbar.html' %}
+{% endblock navbar %}
+
+{% block title %}All Reservations{% endblock title %}
+
+{% block style %}
+<style>
+    body {
+        background: linear-gradient(to right, #ADEED9, #FFEDF3);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .dashboard-container {
+        padding: 2rem;
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #000;
+        margin-bottom: 1rem;
+    }
+
+    .history-card {
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .history-card:hover {
+        transform: scale(1.01);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .badge-custom {
+        font-size: 0.9rem;
+        padding: 0.35em 0.7em;
+        border-radius: 0.6rem;
+        font-weight: 600;
+    }
+
+    .badge-active {
+        background-color: #FFF4C2;
+        color: #333;
+        border: 1px solid #ffd666;
+    }
+
+    .badge-completed {
+        background-color: #C2F3D1;
+        color: #1d4d32;
+        border: 1px solid #97e3aa;
+    }
+
+    .history-card p {
+        margin-bottom: 0.5rem;
+    }
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="container dashboard-container">
+    <div class="section-title">All Reservations</div>
+    {% if all_reservations %}
+        {% for res in all_reservations %}
+        <div class="history-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">Spot ID: {{ res.spot_id }}</h5>
+                {% if not res.end_time %}
+                    <span class="badge-custom badge-active">Active</span>
+                {% else %}
+                    <span class="badge-custom badge-completed">Completed</span>
+                {% endif %}
+            </div>
+
+            <div class="row">
+                <!-- Left Column -->
+                <div class="col-md-6">
+                    <p><strong>User ID:</strong> {{ res.user.id }}</p>
+                    <p><strong>User:</strong> {{ res.user.name }} ({{ res.user.username }})</p>
+                    {% if res.parking_spot and res.parking_spot.parking_lot %}
+                        <p><strong>Lot ID:</strong> {{ res.parking_spot.parking_lot.id }}</p>
+                        <p><strong>Location:</strong> {{ res.parking_spot.parking_lot.prime_location_name }}</p>
+                        <p><strong>Address:</strong> {{ res.parking_spot.parking_lot.address }}</p>
+                        <p><strong>Price/hr:</strong> ₹{{ res.parking_spot.parking_lot.price_per_hour }}</p>
+                    {% else %}
+                        <p><strong>Lot:</strong> Unknown</p>
+                    {% endif %}
+                    <p><strong>Vehicle Number:</strong> {{ res.vehicle_number or "NA" }}</p>
+                </div>
+
+                <!-- Right Column -->
+                <div class="col-md-6">
+                    <p><strong>From:</strong> {{ res.start_time.strftime('%d-%m-%Y %I:%M %p') }}</p>
+                    <p><strong>To:</strong>
+                        {% if res.end_time %}
+                            {{ res.end_time.strftime('%d-%m-%Y %I:%M %p') }}
+                        {% else %}
+                            Ongoing
+                        {% endif %}
+                    </p>
+                    {% set end_time = res.end_time if res.end_time else now_ist %}
+                    {% set duration_seconds = (end_time - res.start_time).total_seconds() %}
+                    {% set hours = (duration_seconds // 3600) | int %}
+                    {% set minutes = ((duration_seconds % 3600) // 60) | int %}
+                    <p><strong>Duration:</strong> {{ hours }} hour{{ 's' if hours != 1 }} {{ minutes }} minute{{ 's' if minutes != 1 }}</p>
+
+                    <p><strong>Total Cost:</strong>
+                        {% if res.total_parking_cost %}
+                            ₹{{ res.total_parking_cost }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-muted">No reservation records found.</p>
+    {% endif %}
+</div>
+{% endblock content %}

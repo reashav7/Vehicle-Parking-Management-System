@@ -17,6 +17,14 @@
         padding: 2rem;
     }
 
+    .welcome-message {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #2b2b2b;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
     .section-title {
         font-size: 1.8rem;
         font-weight: bold;
@@ -33,7 +41,8 @@
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .lot-card:hover {
+    .lot-card:hover,
+    .recent-card:hover {
         transform: scale(1.02);
         box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
     }
@@ -44,16 +53,10 @@
         color: #000;
     }
 
-    .lot-details {
-        color: #333;
-        margin-top: 0.5rem;
-    }
-
     .btn-book, .btn-details {
         border-radius: 12px;
         font-weight: 600;
         padding: 0.5rem 1rem;
-        margin-right: 0.5rem;
         display: inline-block;
         text-decoration: none;
     }
@@ -76,7 +79,6 @@
         background-color: #fcdde7;
     }
 
-    /* New custom badges */
     .badge-custom {
         font-size: 0.9rem;
         padding: 0.35em 0.7em;
@@ -85,18 +87,17 @@
     }
 
     .badge-active {
-        background-color: #FFF4C2; /* soft yellow */
+        background-color: #FFF4C2;
         color: #333;
         border: 1px solid #ffd666;
     }
 
     .badge-completed {
-        background-color: #C2F3D1; /* soft green */
+        background-color: #C2F3D1;
         color: #1d4d32;
         border: 1px solid #97e3aa;
     }
 
-    /* Release Spot Button */
     .btn-release {
         background-color: #FFD3D3;
         color: #b30000;
@@ -110,85 +111,94 @@
         background-color: #ffb0b0;
     }
 </style>
-
 {% endblock style %}
 
 {% block content %}
 <div class="container dashboard-container">
-    <!-- Recent Parking Details -->
-    <div class="section-title">Recent Parking</div>
+
+    <div class="welcome-message text-center">
+    Hello, {{ name }}!
+    <div class="small text-muted">@{{ username }}</div>
+</div>
+
+
+    <div class="section-title">Recent Parkings</div>
     {% if recent_reservations %}
         {% for res in recent_reservations %}
-<div class="recent-card">
-    <div class="d-flex justify-content-between align-items-center mb-2">
-        <h5 class="mb-0">Spot ID: {{ res.spot_id }}</h5>
-        {% if not res.end_time %}
-    <span class="badge-custom badge-active">Active</span>
-{% else %}
-    <span class="badge-custom badge-completed">Completed</span>
-{% endif %}
+        <div class="recent-card">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="mb-0">Spot ID: {{ res.spot_id }}</h5>
+                {% if not res.end_time %}
+                    <span class="badge-custom badge-active">Active</span>
+                {% else %}
+                    <span class="badge-custom badge-completed">Completed</span>
+                {% endif %}
+            </div>
 
-    </div>
-
-    {% if res.parking_spot and res.parking_spot.parking_lot %}
-        <p><strong>Location:</strong> {{ res.parking_spot.parking_lot.prime_location_name }}</p>
-    {% else %}
-        <p><strong>Location:</strong> Unknown (missing data)</p>
-    {% endif %}
-
-    <p><strong>From:</strong> {{ res.start_time.strftime('%d-%m-%Y %I:%M %p') }}</p>
-
-    <p><strong>To:</strong>
-        {% if res.end_time %}
-            {{ res.end_time.strftime('%d-%m-%Y %I:%M %p') }}
-        {% else %}
-            N/A
-        {% endif %}
-    </p>
-
-    <p><strong>Total Cost:</strong>
-        {% if res.total_parking_cost %}
-            ₹{{ res.total_parking_cost }}
-        {% else %}
-            N/A
-        {% endif %}
-    </p>
-
-    {% if not res.end_time %}
-    <form action="{{ url_for('release_parking_spot', reservation_id=res.id) }}" method="get" style="display: inline-block;">
-        <button type="submit" class="btn-release mt-2">Release Spot</button>
-    </form>
-{% endif %}
-
-</div>
-{% endfor %}
-
-
+            <div class="row">
+                <div class="col-md-9">
+                    {% if res.parking_spot and res.parking_spot.parking_lot %}
+                        <p><strong>Location:</strong> {{ res.parking_spot.parking_lot.prime_location_name }}</p>
+                    {% else %}
+                        <p><strong>Location:</strong> Unknown</p>
+                    {% endif %}
+                    <p><strong>From:</strong> {{ res.start_time.strftime('%d-%m-%Y %I:%M %p') }}</p>
+                    <p><strong>To:</strong>
+                        {% if res.end_time %}
+                            {{ res.end_time.strftime('%d-%m-%Y %I:%M %p') }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </p>
+                    <p><strong>Total Cost:</strong>
+                        {% if res.total_parking_cost %}
+                            ₹{{ res.total_parking_cost }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="col-md-3 d-flex justify-content-end align-items-end">
+                    {% if not res.end_time %}
+                    <form action="{{ url_for('release_parking_spot', reservation_id=res.id) }}" method="get">
+                        <button type="submit" class="btn-release">Release Spot</button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
     {% else %}
         <p class="text-muted">No recent parking records found.</p>
     {% endif %}
 
-    <!-- Search Bar -->
+    <div class="text-center mb-4">
+        <a href="{{ url_for('reservation_history', user_id=user_id) }}" class="btn-details">View All Reservations</a>
+    </div>
+
     {% include 'user_searchbar.html' %}
 
-    <!-- Available Parking Lots -->
     <div class="section-title">Available Parking Lots</div>
     {% if parking_lots %}
         {% for lot in parking_lots %}
         <div class="lot-card">
-            <div class="lot-title">{{ lot.prime_location_name }}</div>
-            <div class="lot-details">
-                <p><strong>Address:</strong> {{ lot.address }}</p>
-                <p><strong>PIN Code:</strong> {{ lot.pin_code }}</p>
-                <p><strong>Price/hr:</strong> ₹{{ lot.price_per_hour }}</p>
-                <p><strong>Available Spots:</strong> {{ lot.available_spots_count }}</p>
-            </div>
-            <div class="mt-3">
-                {% if lot.available_spots_count > 0 %}
-                <a href="{{ url_for('book_parking_spot', lot_id=lot.id) }}" class="btn-book">Book Now</a>
-                {% else %}
-                <span class="text-muted">No spots available</span>
-                {% endif %}
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="lot-title">{{ lot.prime_location_name }}</div>
+                    <div class="lot-details">
+                        <p><strong>Address:</strong> {{ lot.address }}</p>
+                        <p><strong>PIN Code:</strong> {{ lot.pin_code }}</p>
+                        <p><strong>Price/hr:</strong> ₹{{ lot.price_per_hour }}</p>
+                        <p><strong>Available Spots:</strong> {{ lot.available_spots_count }}</p>
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex justify-content-end align-items-end">
+                    {% if lot.available_spots_count > 0 %}
+                        <a href="{{ url_for('book_parking_spot', lot_id=lot.id) }}" class="btn-book">Book Now</a>
+                    {% else %}
+                        <span class="text-muted">No spots available</span>
+                    {% endif %}
+                </div>
             </div>
         </div>
         {% endfor %}

@@ -27,6 +27,15 @@
             font-weight: bold;
             color: #000;
         }
+
+        .welcome-message {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #2b2b2b;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+    
         .btn-add-lot {
             background-color: #d1f7f2;
             color: #000;
@@ -111,6 +120,11 @@
 
 {% block content %}
 <div class="container dashboard-container">
+
+    <div class="welcome-message text-center">
+    Hello, {{ name }}!
+    <div class="small text-muted">@{{ username }}</div>
+</div>
     <div class="dashboard-header">
         <h2 class="dashboard-title">Parking Lots</h2>
         <a href="{{ url_for('add_parking_lot') }}" class="btn btn-add-lot">
