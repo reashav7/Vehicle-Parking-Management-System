@@ -43,8 +43,9 @@
 
 <style>
     body {
-        background: linear-gradient(to right, #ADEED9, #FFEDF3);
+        background-color: #F9F3EF;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #1B3C53;
     }
 
     .book-container {
@@ -52,10 +53,11 @@
     }
 
     .book-card {
-        background-color: rgba(255, 255, 255, 0.95);
-        border-radius: 20px;
+        background-color: #FFFFFF;
+        border-left: 6px solid #456882;
+        border-radius: 16px;
         padding: 2rem;
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
         min-width: 320px;
         max-width: 500px;
         width: 100%;
@@ -63,21 +65,40 @@
 
     .form-title {
         font-size: 1.75rem;
-        font-weight: 700;
-        color: #000000;
+        font-weight: bold;
+        color: #1B3C53;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #1B3C53;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        border: 1px solid #D2C1B6;
+        background-color: #FDFDFD;
+        color: #1B3C53;
+    }
+
+    .form-control:focus {
+        border-color: #456882;
+        box-shadow: 0 0 0 0.15rem rgba(69, 104, 130, 0.25);
     }
 
     .btn-save {
-        background-color: #56DFCF;
-        color: #000000;
-        font-size: 1.1rem;
+        background-color: #456882;
+        color: #fff;
+        font-size: 1.05rem;
         padding: 0.75rem;
         border-radius: 12px;
+        font-weight: 600;
         border: none;
     }
 
     .btn-save:hover {
-        background-color: #3dd7c2;
+        background-color: #36556b;
+        color: #fff;
     }
 </style>
 {% endblock content %}

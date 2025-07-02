@@ -7,116 +7,122 @@
 {% block title %}Admin Dashboard{% endblock title %}
 
 
-{% block style %}
- <style>
-        body {
-            background: linear-gradient(to right, #ADEED9, #FFEDF3);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .dashboard-container {
-            padding: 2rem;
-        }
-        .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-        .dashboard-title {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #000;
-        }
 
-        .welcome-message {
+ {% block style %}
+<style>
+    body {
+        background-color: #F4F6F8;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .dashboard-container {
+        padding: 2rem;
+    }
+
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .dashboard-title {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #1B3C53;
+    }
+
+    .welcome-message {
         font-size: 1.8rem;
         font-weight: bold;
         color: #2b2b2b;
         margin-bottom: 1.5rem;
         text-align: center;
     }
-    
-        .btn-add-lot {
-            background-color: #d1f7f2;
-            color: #000;
-            border-radius: 12px;
-            padding: 0.5rem 1rem;
-            font-weight: 600;
-        }
-        .btn-add-lot:hover {
-            background-color: #56DFCF;
-        }
-        .lot-card {
-            background-color: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            margin-bottom: 1.5rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .lot-card:hover {
-            transform: scale(1.02);
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
-        }
-        .lot-card-body {
-            padding: 1.5rem;
-        }
-        .lot-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #000;
-        }
-        .lot-details {
-            color: #333;
-            margin-top: 0.5rem;
-        }
-        .btn-view {
-            background-color: #56DFCF;
-            color: #000;
-            border-radius: 12px;
-            font-weight: 600;
-            padding: 0.5rem 1rem;
-        }
-        .btn-view:hover {
-            background-color: #3dd7c2;
-        }
 
-        .fixed-btn {
-    width: 140px;
-    border-radius: 12px;
-    font-weight: 600;
-    padding: 0.5rem 1rem;
-    text-align: center;
-}
+    .btn-add-lot {
+        background-color: #456882;
+        color: #fff;
+        border-radius: 12px;
+        padding: 0.5rem 1rem;
+        font-weight: 600;
+        border: none;
+    }
 
-/* Button Colors */
-.btn-view {
-    background-color: #56DFCF;
-    color: #000;
-}
-.btn-view:hover {
-    background-color: #3dd7c2;
-}
+    .btn-add-lot:hover {
+        background-color: #1B3C53;
+        color: #fff;
+    }
 
-.btn-edit {
-    background-color: #FFEDF3;
-    color: #000;
-}
-.btn-edit:hover {
-    background-color: #fcdde7;
-}
+    .lot-card {
+        background-color: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 1.5rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
 
-.btn-delete {
-    background-color: #FF6B81;
-    color: #fff;
-}
-.btn-delete:hover {
-    background-color: #ff4d66;
-}
+    .lot-card:hover {
+        transform: scale(1.02);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+    }
 
+    .lot-card-body {
+        padding: 1.5rem;
+    }
 
-    </style>
+    .lot-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #1B3C53;
+    }
 
+    .lot-details {
+        color: #333;
+        margin-top: 0.5rem;
+    }
+
+    .fixed-btn {
+        width: 140px;
+        border-radius: 12px;
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        text-align: center;
+        border: none;
+    }
+
+    .btn-view {
+        background-color: #456882;
+        color: #fff;
+    }
+
+    .btn-view:hover {
+        background-color: #2f4c63;
+        color: #fff;
+    }
+
+    .btn-edit {
+        background-color: #F9F3EF;
+        color: #000;
+    }
+
+    .btn-edit:hover {
+        background-color: #f1e8e3;
+    }
+
+    .btn-delete {
+        background-color: #FF6B81;
+        color: #fff;
+    }
+
+    .btn-delete:hover {
+        background-color: #e94c63;
+    }
+</style>
 {% endblock style %}
+
+
+
 
 {% block content %}
 <div class="container dashboard-container">

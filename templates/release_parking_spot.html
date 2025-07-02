@@ -58,8 +58,9 @@
 
 <style>
     body {
-        background: linear-gradient(to right, #ADEED9, #FFEDF3);
+        background: linear-gradient(to right, #D2C1B6, #F9F3EF);
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #1B3C53;
         margin: 0;
         padding: 0;
     }
@@ -71,10 +72,11 @@
     }
 
     .book-card {
-        background-color: rgba(255, 255, 255, 0.95);
-        border-radius: 20px;
-        padding: 2rem;
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        background-color: #FFFFFF;
+        border-left: 6px solid #456882;
+        border-radius: 16px;
+        padding: 2.5rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         width: 100%;
         max-width: 500px;
     }
@@ -82,26 +84,39 @@
     .form-title {
         font-size: 1.75rem;
         font-weight: 700;
-        color: #000000;
+        color: #1B3C53;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #456882;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        padding: 0.6rem 1rem;
     }
 
     .btn-release {
-        background-color: #FFB3B3; /* pastel red */
-        color: #000000;
-        font-size: 1.1rem;
+        background-color: #F9F3EF;
+        color: #b30000;
+        font-weight: 600;
+        font-size: 1rem;
         padding: 0.75rem;
-        border-radius: 12px;
-        border: none;
-        transition: background-color 0.3s ease;
+        border-radius: 10px;
+        border: 1px solid #f2d6d6;
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     .btn-release:hover {
-        background-color: #FF9999;
+        background-color: #f2c5c5;
+        color: #b30000;
     }
 
     @media (max-width: 576px) {
         .book-card {
-            padding: 1.5rem;
+            padding: 1.75rem;
         }
 
         .form-title {

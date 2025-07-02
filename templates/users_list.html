@@ -9,52 +9,69 @@
 {% block style %}
 <style>
     body {
-        background: linear-gradient(to right, #ADEED9, #FFEDF3);
+        background-color: #F9F3EF;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #1B3C53;
     }
+
     .users-container {
         padding: 2rem;
     }
+
     .users-card {
-        background-color: rgba(255, 255, 255, 0.95);
-        border-radius: 15px;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        background-color: #FFFFFF;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
         padding: 2rem;
     }
+
     .users-card h2 {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
         font-weight: bold;
         margin-bottom: 1.5rem;
-        color: #333;
+        color: #1B3C53;
     }
+
     .user-table {
         width: 100%;
         border-collapse: collapse;
+        border-radius: 10px;
+        overflow: hidden;
     }
+
     .user-table th,
     .user-table td {
         padding: 0.75rem 1rem;
         text-align: left;
-        border-bottom: 1px solid #ccc;
+        border-bottom: 1px solid #ddd;
     }
+
     .user-table th {
-        background-color: #56DFCF;
-        color: #000;
+        background-color: #456882;
+        color: #fff;
     }
+
     .user-table tr:nth-child(even) {
-        background-color: #f9f9f9;
+        background-color: #F5F5F5;
     }
+
+    .user-table tr:hover {
+        background-color: #f0eae4;
+    }
+
     .btn-back {
         margin-top: 2rem;
-        background-color: #56DFCF;
-        color: #000;
-        border-radius: 12px;
+        background-color: #D2C1B6;
+        color: #1B3C53;
+        border-radius: 10px;
         padding: 0.5rem 1rem;
         font-weight: 600;
         text-decoration: none;
+        display: inline-block;
     }
+
     .btn-back:hover {
-        background-color: #3dd7c2;
+        background-color: #c6b1a4;
     }
 </style>
 {% endblock style %}
@@ -64,31 +81,29 @@
     <div class="users-card">
         <h2>Registered Users</h2>
         <table class="user-table">
-           <thead>
-    <tr>
-        <th>Sl. No.</th>
-        <th>Name</th>
-        <th>Username</th>
-        <th>Admin</th>
-        <th>Vehicle Numbers</th>  <!-- NEW COLUMN -->
-    </tr>
-</thead>
-<tbody>
-    {% for user in users %}
-    <tr>
-        <td>{{ loop.index }}</td>
-        <td>{{ user.name }}</td>
-        <td>{{ user.username }}</td>
-        <td>{{ 'Yes' if user.is_admin else 'No' }}</td>
-        <td>{{ user.vehicle_numbers }}</td> <!-- UPDATED -->
-    </tr>
-    {% endfor %}
-</tbody>
-
-
+            <thead>
+                <tr>
+                    <th>Sl. No.</th>
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Admin</th>
+                    <th>Vehicle Numbers</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ 'Yes' if user.is_admin else 'No' }}</td>
+                    <td>{{ user.vehicle_numbers }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
 
-        <a href="{{ url_for('admin_dashboard', user_id=session['user_id']) }}" class="btn btn-back">← Back to Dashboard</a>
+        <a href="{{ url_for('admin_dashboard', user_id=session['user_id']) }}" class="btn-back">← Back to Dashboard</a>
     </div>
 </div>
 {% endblock content %}

@@ -5,16 +5,11 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from sqlalchemy import or_, case
 from datetime import datetime, timedelta
-
 import pytz
 from flask_login import login_required
 from sqlalchemy.orm import joinedload
-
-
-
 import io
 import base64
-import matplotlib.pyplot as plt
 import os
 
 @app.route('/')

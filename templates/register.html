@@ -5,6 +5,71 @@
 {% endblock title %}
 
 {% block content %}
+<style>
+    body {
+        background: linear-gradient(to right, #D2C1B6, #F9F3EF);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #1B3C53;
+    }
+
+    .register-container {
+        height: 100vh;
+    }
+
+    .register-card {
+        background-color: #FFFFFF;
+        border-left: 6px solid #456882;
+        border-radius: 16px;
+        padding: 2.5rem;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+        min-width: 320px;
+        max-width: 450px;
+        width: 100%;
+    }
+
+    .form-title {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #1B3C53;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #456882;
+        margin-bottom: 0.4rem;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        padding: 0.6rem 1rem;
+        font-size: 1rem;
+        color: #1B3C53;
+        background-color: #FAFAFA;
+        transition: border-color 0.3s;
+    }
+
+    .form-control:focus {
+        border-color: #456882;
+        box-shadow: none;
+    }
+
+    .btn-register {
+        background-color: #456882;
+        color: #FFFFFF;
+        font-weight: 600;
+        font-size: 1rem;
+        padding: 0.75rem;
+        border-radius: 10px;
+        border: none;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .btn-register:hover {
+        background-color: #1B3C53;
+        color: #F9F3EF;
+    }
+</style>
 
 <div class="container d-flex justify-content-center align-items-center register-container">
     <div class="register-card text-center">
@@ -32,45 +97,4 @@
         </form>
     </div>
 </div>
-
-<style>
-    body {
-        background: linear-gradient(to right, #ADEED9, #FFEDF3);
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    .register-container {
-        height: 100vh;
-    }
-
-    .register-card {
-        background-color: rgba(255, 255, 255, 0.95);
-        border-radius: 20px;
-        padding: 2rem;
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
-        min-width: 320px;
-        max-width: 450px;
-        width: 100%;
-    }
-
-    .form-title {
-        font-size: 1.75rem;
-        font-weight: 700;
-        color: #000000;
-    }
-
-    .btn-register {
-        background-color: #56DFCF;
-        color: #000000;
-        font-size: 1.1rem;
-        padding: 0.75rem;
-        border-radius: 12px;
-        border: none;
-    }
-
-    .btn-register:hover {
-        background-color: #3dd7c2;
-    }
-</style>
-
 {% endblock content %}

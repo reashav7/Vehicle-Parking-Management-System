@@ -5,6 +5,67 @@
 {% endblock title %}
 
 {% block content %}
+<style>
+    body {
+        background: linear-gradient(to right, #D2C1B6, #F9F3EF);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #1B3C53;
+    }
+
+    .landing-container {
+        height: 100vh;
+    }
+
+    .custom-card {
+        background-color: #FFFFFF;
+        border-left: 6px solid #456882;
+        border-radius: 16px;
+        padding: 2.5rem;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+        min-width: 320px;
+        max-width: 400px;
+        width: 100%;
+    }
+
+    .app-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1B3C53;
+    }
+
+    .text-muted {
+        color: #456882;
+        font-size: 1rem;
+    }
+
+    .btn-custom {
+        font-size: 1.1rem;
+        padding: 0.75rem;
+        border-radius: 12px;
+        border: none;
+        font-weight: 600;
+    }
+
+    .btn-user {
+        background-color: #456882;
+        color: #FFFFFF;
+    }
+
+    .btn-user:hover {
+        background-color: #1B3C53;
+        color: #F9F3EF;
+    }
+
+    .btn-admin {
+        background-color: #D2C1B6;
+        color: #1B3C53;
+    }
+
+    .btn-admin:hover {
+        background-color: #bfa598;
+        color: #1B3C53;
+    }
+</style>
 
 <div class="container d-flex justify-content-center align-items-center landing-container">
     <div class="custom-card text-center">
@@ -16,57 +77,4 @@
         </div>
     </div>
 </div>
-
-<style>
-    body {
-        background: linear-gradient(to right, #ADEED9, #FFEDF3);
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    .landing-container {
-        height: 100vh;
-    }
-
-    .custom-card {
-        background-color: rgba(255, 255, 255, 0.95);
-        border-radius: 20px;
-        padding: 2rem;
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
-        min-width: 320px;
-        max-width: 400px;
-        width: 100%;
-    }
-
-    .app-title {
-        font-size: 2rem;
-        font-weight: 700;
-        color: #000000;
-    }
-
-    .btn-custom {
-        font-size: 1.1rem;
-        padding: 0.75rem;
-        border-radius: 12px;
-        border: none;
-    }
-
-    .btn-user {
-        background-color: #56DFCF;
-        color: #000000;
-    }
-
-    .btn-user:hover {
-        background-color: #3dd7c2;
-    }
-
-    .btn-admin {
-        background-color: #FFEDF3;
-        color: #000000;
-    }
-
-    .btn-admin:hover {
-        background-color: #fcdde7;
-    }
-</style>
-
 {% endblock content %}

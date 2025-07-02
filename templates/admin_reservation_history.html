@@ -9,8 +9,9 @@
 {% block style %}
 <style>
     body {
-        background: linear-gradient(to right, #ADEED9, #FFEDF3);
+        background-color: #F9F3EF;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #1B3C53;
     }
 
     .dashboard-container {
@@ -18,24 +19,25 @@
     }
 
     .section-title {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
         font-weight: bold;
-        color: #000;
-        margin-bottom: 1rem;
+        color: #1B3C53;
+        margin-bottom: 1.5rem;
     }
 
     .history-card {
-        background-color: rgba(255, 255, 255, 0.95);
-        border-radius: 15px;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        background-color: #FFFFFF;
+        border-left: 6px solid #456882;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
         padding: 1.5rem;
         margin-bottom: 1.5rem;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .history-card:hover {
-        transform: scale(1.01);
-        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        transform: scale(1.015);
+        box-shadow: 0 10px 22px rgba(0, 0, 0, 0.1);
     }
 
     .badge-custom {
@@ -46,19 +48,29 @@
     }
 
     .badge-active {
-        background-color: #FFF4C2;
-        color: #333;
-        border: 1px solid #ffd666;
+        background-color: #F9F3EF;
+        color: #456882;
+        border: 1px solid #456882;
     }
 
     .badge-completed {
-        background-color: #C2F3D1;
-        color: #1d4d32;
-        border: 1px solid #97e3aa;
+        background-color: #D2C1B6;
+        color: #1B3C53;
+        border: 1px solid #c4b0a2;
     }
 
     .history-card p {
         margin-bottom: 0.5rem;
+        color: #1B3C53;
+    }
+
+    h5 {
+        color: #1B3C53;
+        font-weight: 600;
+    }
+
+    .text-muted {
+        color: #888;
     }
 </style>
 {% endblock style %}

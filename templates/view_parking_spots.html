@@ -1,86 +1,104 @@
-
 {% extends 'layout.html' %}
+
+{% block title %}Parking Lot Details{% endblock title %}
 
 {% block navbar %}
     {% include 'admin_navbar.html' %}
 {% endblock navbar %}
 
-{% block title %}Parking Lot Details{% endblock title %}
-
 {% block style %}
 <style>
     body {
-        background: linear-gradient(to right, #ADEED9, #FFEDF3);
+        background-color: #F9F3EF;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #1B3C53;
     }
+
     .lot-detail-container {
         padding: 2rem;
     }
+
     .lot-detail-card {
-        background-color: rgba(255, 255, 255, 0.95);
+        background-color: #FFFFFF;
         border-radius: 15px;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
         padding: 2rem;
     }
+
     .lot-detail-title {
-        font-size: 2rem;
+        font-size: 1.8rem;
         font-weight: bold;
-        color: #000;
-        margin-bottom: 1rem;
+        color: #1B3C53;
+        margin-bottom: 1.5rem;
     }
+
     .lot-detail-section {
         margin-bottom: 1.5rem;
     }
+
     .lot-detail-section h5 {
         font-weight: 600;
+        color: #456882;
+        margin-bottom: 0.5rem;
+    }
+
+    .lot-detail-section p {
+        margin: 0.3rem 0;
         color: #333;
     }
-    .lot-detail-section p {
-        margin: 0.25rem 0;
-        color: #555;
-    }
-    .btn-back, .btn-add-spot {
-        border-radius: 12px;
-        padding: 0.5rem 1rem;
+
+    .btn-back,
+    .btn-add-spot {
+        border-radius: 10px;
+        padding: 0.5rem 1.2rem;
         font-weight: 600;
         text-decoration: none;
+        display: inline-block;
     }
-    .btn-back {
-        background-color: #56DFCF;
-        color: #000;
-    }
-    .btn-back:hover {
-        background-color: #3dd7c2;
-    }
+
     .btn-add-spot {
-        background-color: #FFEDF3;
-        color: #000;
+        background-color: #D2C1B6;
+        color: #1B3C53;
         margin-bottom: 1.5rem;
     }
+
     .btn-add-spot:hover {
-        background-color: #fcdde7;
+        background-color: #c6b1a4;
+    }
+
+    .btn-back {
+        background-color: #456882;
+        color: #fff;
+    }
+
+    .btn-back:hover {
+        background-color: #36556b;
     }
 
     .spot-box {
-        width: 50px;
-        height: 50px;
+        width: 48px;
+        height: 48px;
         border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-weight: 600;
-        color: #fff;
         font-size: 0.9rem;
+        color: #fff;
         margin: auto;
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
     }
 
     .available {
-        background-color: #56DFCF;
+        background-color: #456882;
     }
 
     .reserved {
         background-color: #FF6B81;
+    }
+
+    .text-muted {
+        color: #777;
     }
 </style>
 {% endblock style %}
@@ -109,14 +127,13 @@
 
         <div class="lot-detail-section">
             <h5>Spots Overview</h5>
-
             {% if parking_spots %}
                 <div class="row gx-2 gy-2">
                     {% for spot in parking_spots %}
                         <div class="col-3 col-sm-2 col-md-1 text-center">
                             <a href="{{ url_for('parking_spot', spot_id=spot.id) }}" class="text-decoration-none">
                                 <div class="spot-box {{ 'available' if spot.status == 'A' else 'reserved' }}">
-                                    {{ 'A' if spot.status == 'A' else 'O' }}
+                                    {{ 'A' if spot.status == 'A' else 'R' }}
                                 </div>
                             </a>
                         </div>
@@ -128,12 +145,12 @@
         </div>
 
         <div class="mb-4">
-            <a href="{{ url_for('add_parking_spot', lot_id=parking_lot.id) }}" class="btn btn-add-spot">
+            <a href="{{ url_for('add_parking_spot', lot_id=parking_lot.id) }}" class="btn-add-spot">
                 <i class="fa-solid fa-plus"></i> Add Spot(s)
             </a>
         </div>
 
-        <a href="{{ url_for('admin_dashboard', user_id=session['user_id']) }}" class="btn btn-back">Back to Dashboard</a>
+        <a href="{{ url_for('admin_dashboard', user_id=session['user_id']) }}" class="btn-back">← Back to Dashboard</a>
     </div>
 </div>
 {% endblock content %}

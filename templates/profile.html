@@ -4,12 +4,14 @@
     Profile
 {% endblock title %}
 
+
 {% block content %}
 
 <style>
     body {
-        background: linear-gradient(to right, #ADEED9, #FFEDF3);
+        background: linear-gradient(to right, #D2C1B6, #F9F3EF);
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #1B3C53;
     }
 
     .register-container {
@@ -17,45 +19,57 @@
     }
 
     .register-card {
-        background-color: rgba(255, 255, 255, 0.95);
-        border-radius: 20px;
+        background-color: #FFFFFF;
+        border-left: 6px solid #456882;
+        border-radius: 16px;
         padding: 2.5rem;
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
         min-width: 320px;
         max-width: 450px;
         width: 100%;
     }
 
     .form-title {
-        font-size: 2rem;
+        font-size: 1.8rem;
         font-weight: bold;
-        color: #000000;
+        color: #1B3C53;
     }
 
     .form-label {
-        font-weight: 500;
-        color: #333;
+        font-weight: 600;
+        color: #456882;
+        margin-bottom: 0.4rem;
     }
 
     .form-control {
-        border-radius: 12px;
+        border-radius: 10px;
         border: 1px solid #ccc;
         padding: 0.6rem 1rem;
+        font-size: 1rem;
+        color: #1B3C53;
+        background-color: #FAFAFA;
+        transition: border-color 0.3s;
+    }
+
+    .form-control:focus {
+        border-color: #456882;
+        box-shadow: none;
     }
 
     .btn-register {
-        background-color: #56DFCF;
-        color: #000;
+        background-color: #456882;
+        color: #FFFFFF;
         font-weight: 600;
         font-size: 1rem;
         padding: 0.75rem;
-        border-radius: 12px;
+        border-radius: 10px;
         border: none;
-        transition: background-color 0.3s ease;
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     .btn-register:hover {
-        background-color: #3dd7c2;
+        background-color: #1B3C53;
+        color: #F9F3EF;
     }
 </style>
 

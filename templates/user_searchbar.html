@@ -1,41 +1,54 @@
 <!-- searchbar.html -->
 <style>
   .search-container {
-    background-color: rgba(255, 255, 255, 0.95);
+    background-color: #1B3C53;
     padding: 1rem 1.5rem;
     border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     margin-bottom: 2rem;
   }
 
   .search-input {
-    border: 2px solid #ADEED9;
+    background-color: #ffffff;
+    border: 2px solid #456882;
     border-radius: 12px;
     padding: 0.5rem 1rem;
     font-size: 1rem;
     width: 100%;
     max-width: 500px;
+    color: #1B3C53;
     outline: none;
-    transition: border-color 0.3s;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .search-input::placeholder {
+    color: #999;
   }
 
   .search-input:focus {
-    border-color: #56DFCF;
+    border-color: #456882;
+    box-shadow: 0 0 0 3px rgba(69, 104, 130, 0.2);
   }
 
   .btn-search {
-    background-color: #FFEDF3;
+    background-color: #D2C1B6;
     border: none;
     border-radius: 12px;
     padding: 0.5rem 1.2rem;
     margin-left: 0.5rem;
     font-weight: 600;
-    color: #000;
-    transition: background-color 0.3s ease;
+    color: #1B3C53;
+    transition: background-color 0.3s ease, color 0.3s;
   }
 
   .btn-search:hover {
-    background-color: #fcdde7;
+    background-color: #bda99d;
+    color: #ffffff;
+  }
+
+  .btn-search i {
+    margin-right: 5px;
+    color: #1B3C53;
   }
 </style>
 
