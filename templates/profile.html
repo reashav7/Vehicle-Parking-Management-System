@@ -7,6 +7,35 @@
 
 {% block content %}
 
+
+<div class="container d-flex justify-content-center align-items-center register-container">
+    <div class="register-card text-center">
+        <h2 class="form-title mb-4">Edit Profile</h2>
+        <form method="POST" action="">
+            <div class="mb-3 text-start">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" name="name" id="name" value="{{ user.name }}" required>
+            </div>
+            <div class="mb-3 text-start">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" name="username" id="username" value="{{ user.username }}" required>
+            </div>
+            <div class="mb-3 text-start">
+                <label for="cpassword" class="form-label">Current Password</label>
+                <input type="password" class="form-control" name="cpassword" id="cpassword" required>
+            </div>
+            <div class="mb-4 text-start">
+                <label for="password" class="form-label">New Password</label>
+                <input type="password" class="form-control" name="password" id="password" required>
+            </div>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-register">Update Profile</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
 <style>
     body {
         background: linear-gradient(to right, #D2C1B6, #F9F3EF);
@@ -72,32 +101,5 @@
         color: #F9F3EF;
     }
 </style>
-
-<div class="container d-flex justify-content-center align-items-center register-container">
-    <div class="register-card text-center">
-        <h2 class="form-title mb-4">Edit Profile</h2>
-        <form method="POST" action="">
-            <div class="mb-3 text-start">
-                <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control" name="name" id="name" value="{{ user.name }}" required>
-            </div>
-            <div class="mb-3 text-start">
-                <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" name="username" id="username" value="{{ user.username }}" required>
-            </div>
-            <div class="mb-3 text-start">
-                <label for="cpassword" class="form-label">Current Password</label>
-                <input type="password" class="form-control" name="cpassword" id="cpassword" required>
-            </div>
-            <div class="mb-4 text-start">
-                <label for="password" class="form-label">New Password</label>
-                <input type="password" class="form-control" name="password" id="password" required>
-            </div>
-            <div class="d-grid">
-                <button type="submit" class="btn btn-register">Update Profile</button>
-            </div>
-        </form>
-    </div>
-</div>
 
 {% endblock content %}

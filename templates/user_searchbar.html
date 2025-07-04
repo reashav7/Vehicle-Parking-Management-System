@@ -1,4 +1,14 @@
 <!-- searchbar.html -->
+
+<div class="search-container d-flex flex-column align-items-center">
+  <form method="GET" action="{{ url_for('user_dashboard', user_id=user_id) }}" class="d-flex w-100 justify-content-center">
+    <input type="text" name="query" placeholder="Search for location, area, or PIN..." class="search-input">
+    <button type="submit" class="btn btn-search">
+      <i class="fa-solid fa-magnifying-glass"></i> Search
+    </button>
+  </form>
+</div>
+
 <style>
   .search-container {
     background-color: #1B3C53;
@@ -52,11 +62,4 @@
   }
 </style>
 
-<div class="search-container d-flex flex-column align-items-center">
-  <form method="GET" action="{{ url_for('user_dashboard', user_id=user_id) }}" class="d-flex w-100 justify-content-center">
-    <input type="text" name="query" placeholder="Search for location, area, or PIN..." class="search-input">
-    <button type="submit" class="btn btn-search">
-      <i class="fa-solid fa-magnifying-glass"></i> Search
-    </button>
-  </form>
-</div>
+

@@ -6,6 +6,80 @@
 
 {% block title %}Reservation History{% endblock title %}
 
+
+{% block content %}
+<div class="container dashboard-container">
+
+    <div class="section-title">Reservation History</div>
+
+    {% if all_reservations %}
+        {% for res in all_reservations %}
+        <div class="history-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">Spot ID: {{ res.spot_id }}</h5>
+                {% if not res.end_time %}
+                    <span class="badge-custom badge-active">Active</span>
+                {% else %}
+                    <span class="badge-custom badge-completed">Completed</span>
+                {% endif %}
+            </div>
+
+            <div class="row">
+                <!-- Left Column -->
+                <div class="col-md-6">
+                    {% if res.parking_spot and res.parking_spot.parking_lot %}
+                        <p><strong>Lot ID:</strong> {{ res.parking_spot.parking_lot.id }}</p>
+                        <p><strong>Location:</strong> {{ res.parking_spot.parking_lot.prime_location_name }}</p>
+                        <p><strong>Address:</strong> {{ res.parking_spot.parking_lot.address }}</p>
+                        <p><strong>Price/hr:</strong> ₹{{ res.parking_spot.parking_lot.price_per_hour }}</p>
+                    {% else %}
+                        <p><strong>Lot:</strong> Unknown</p>
+                    {% endif %}
+                    <p><strong>Vehicle Number:</strong> {{ res.vehicle_number or "NA" }}</p>
+                </div>
+
+                <!-- Right Column -->
+                <div class="col-md-6">
+                    <p><strong>From:</strong> {{ res.start_time.strftime('%d-%m-%Y %I:%M %p') }}</p>
+                    <p><strong>To:</strong>
+                        {% if res.end_time %}
+                            {{ res.end_time.strftime('%d-%m-%Y %I:%M %p') }}
+                        {% else %}
+                            Ongoing
+                        {% endif %}
+                    </p>
+                    {% set end_time = res.end_time if res.end_time else now_ist %}
+                    {% set duration_seconds = (end_time - res.start_time).total_seconds() %}
+                    {% set hours = (duration_seconds // 3600) | int %}
+                    {% set minutes = ((duration_seconds % 3600) // 60) | int %}
+                    <p><strong>Duration:</strong> {{ hours }} hour{{ 's' if hours != 1 }} {{ minutes }} minute{{ 's' if minutes != 1 }}</p>
+
+                    <p><strong>Total Cost:</strong>
+                        {% if res.total_parking_cost %}
+                            ₹{{ res.total_parking_cost }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+
+            {% if not res.end_time %}
+            <div class="mt-3 text-end">
+                <form action="{{ url_for('release_parking_spot', reservation_id=res.id) }}" method="get">
+                    <button type="submit" class="btn-release">Release Spot</button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-muted">No reservation history found.</p>
+    {% endif %}
+</div>
+{% endblock content %}
+
+
 {% block style %}
 <style>
     body {
@@ -88,74 +162,3 @@
 </style>
 {% endblock style %}
 
-{% block content %}
-<div class="container dashboard-container">
-
-    <div class="section-title">Reservation History</div>
-
-    {% if all_reservations %}
-        {% for res in all_reservations %}
-        <div class="history-card">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">Spot ID: {{ res.spot_id }}</h5>
-                {% if not res.end_time %}
-                    <span class="badge-custom badge-active">Active</span>
-                {% else %}
-                    <span class="badge-custom badge-completed">Completed</span>
-                {% endif %}
-            </div>
-
-            <div class="row">
-                <!-- Left Column -->
-                <div class="col-md-6">
-                    {% if res.parking_spot and res.parking_spot.parking_lot %}
-                        <p><strong>Lot ID:</strong> {{ res.parking_spot.parking_lot.id }}</p>
-                        <p><strong>Location:</strong> {{ res.parking_spot.parking_lot.prime_location_name }}</p>
-                        <p><strong>Address:</strong> {{ res.parking_spot.parking_lot.address }}</p>
-                        <p><strong>Price/hr:</strong> ₹{{ res.parking_spot.parking_lot.price_per_hour }}</p>
-                    {% else %}
-                        <p><strong>Lot:</strong> Unknown</p>
-                    {% endif %}
-                    <p><strong>Vehicle Number:</strong> {{ res.vehicle_number or "NA" }}</p>
-                </div>
-
-                <!-- Right Column -->
-                <div class="col-md-6">
-                    <p><strong>From:</strong> {{ res.start_time.strftime('%d-%m-%Y %I:%M %p') }}</p>
-                    <p><strong>To:</strong>
-                        {% if res.end_time %}
-                            {{ res.end_time.strftime('%d-%m-%Y %I:%M %p') }}
-                        {% else %}
-                            Ongoing
-                        {% endif %}
-                    </p>
-                    {% set end_time = res.end_time if res.end_time else now_ist %}
-                    {% set duration_seconds = (end_time - res.start_time).total_seconds() %}
-                    {% set hours = (duration_seconds // 3600) | int %}
-                    {% set minutes = ((duration_seconds % 3600) // 60) | int %}
-                    <p><strong>Duration:</strong> {{ hours }} hour{{ 's' if hours != 1 }} {{ minutes }} minute{{ 's' if minutes != 1 }}</p>
-
-                    <p><strong>Total Cost:</strong>
-                        {% if res.total_parking_cost %}
-                            ₹{{ res.total_parking_cost }}
-                        {% else %}
-                            N/A
-                        {% endif %}
-                    </p>
-                </div>
-            </div>
-
-            {% if not res.end_time %}
-            <div class="mt-3 text-end">
-                <form action="{{ url_for('release_parking_spot', reservation_id=res.id) }}" method="get">
-                    <button type="submit" class="btn-release">Release Spot</button>
-                </form>
-            </div>
-            {% endif %}
-        </div>
-        {% endfor %}
-    {% else %}
-        <p class="text-muted">No reservation history found.</p>
-    {% endif %}
-</div>
-{% endblock content %}

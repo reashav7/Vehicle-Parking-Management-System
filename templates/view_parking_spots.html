@@ -6,6 +6,60 @@
     {% include 'admin_navbar.html' %}
 {% endblock navbar %}
 
+
+{% block content %}
+<div class="container lot-detail-container">
+    <div class="lot-detail-card">
+        <div class="lot-detail-title">{{ parking_lot.prime_location_name }}</div>
+
+        <div class="lot-detail-section">
+            <h5>Address</h5>
+            <p>{{ parking_lot.address }}</p>
+            <p><strong>PIN Code:</strong> {{ parking_lot.pin_code }}</p>
+        </div>
+
+        <div class="lot-detail-section">
+            <h5>Pricing</h5>
+            <p><strong>Price per Hour:</strong> ₹{{ parking_lot.price_per_hour }}</p>
+        </div>
+
+        <div class="lot-detail-section">
+            <h5>Parking Capacity</h5>
+            <p><strong>Total Spots Allowed:</strong> {{ parking_lot.maximum_spots }}</p>
+            <p><strong>Currently Added Spots:</strong> {{ parking_spots|length }}</p>
+        </div>
+
+        <div class="lot-detail-section">
+            <h5>Spots Overview</h5>
+            {% if parking_spots %}
+                <div class="row gx-2 gy-2">
+                    {% for spot in parking_spots %}
+                        <div class="col-3 col-sm-2 col-md-1 text-center">
+                            <a href="{{ url_for('parking_spot', spot_id=spot.id) }}" class="text-decoration-none">
+                                <div class="spot-box {{ 'available' if spot.status == 'A' else 'reserved' }}">
+                                    {{ 'A' if spot.status == 'A' else 'R' }}
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted">No spots available for this lot yet.</p>
+            {% endif %}
+        </div>
+
+        <div class="mb-4">
+            <a href="{{ url_for('add_parking_spot', lot_id=parking_lot.id) }}" class="btn-add-spot">
+                <i class="fa-solid fa-plus"></i> Add Spot(s)
+            </a>
+        </div>
+
+        <a href="{{ url_for('admin_dashboard', user_id=session['user_id']) }}" class="btn-back">← Back to Dashboard</a>
+    </div>
+</div>
+{% endblock content %}
+
+
 {% block style %}
 <style>
     body {
@@ -102,55 +156,3 @@
     }
 </style>
 {% endblock style %}
-
-{% block content %}
-<div class="container lot-detail-container">
-    <div class="lot-detail-card">
-        <div class="lot-detail-title">{{ parking_lot.prime_location_name }}</div>
-
-        <div class="lot-detail-section">
-            <h5>Address</h5>
-            <p>{{ parking_lot.address }}</p>
-            <p><strong>PIN Code:</strong> {{ parking_lot.pin_code }}</p>
-        </div>
-
-        <div class="lot-detail-section">
-            <h5>Pricing</h5>
-            <p><strong>Price per Hour:</strong> ₹{{ parking_lot.price_per_hour }}</p>
-        </div>
-
-        <div class="lot-detail-section">
-            <h5>Parking Capacity</h5>
-            <p><strong>Total Spots Allowed:</strong> {{ parking_lot.maximum_spots }}</p>
-            <p><strong>Currently Added Spots:</strong> {{ parking_spots|length }}</p>
-        </div>
-
-        <div class="lot-detail-section">
-            <h5>Spots Overview</h5>
-            {% if parking_spots %}
-                <div class="row gx-2 gy-2">
-                    {% for spot in parking_spots %}
-                        <div class="col-3 col-sm-2 col-md-1 text-center">
-                            <a href="{{ url_for('parking_spot', spot_id=spot.id) }}" class="text-decoration-none">
-                                <div class="spot-box {{ 'available' if spot.status == 'A' else 'reserved' }}">
-                                    {{ 'A' if spot.status == 'A' else 'R' }}
-                                </div>
-                            </a>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <p class="text-muted">No spots available for this lot yet.</p>
-            {% endif %}
-        </div>
-
-        <div class="mb-4">
-            <a href="{{ url_for('add_parking_spot', lot_id=parking_lot.id) }}" class="btn-add-spot">
-                <i class="fa-solid fa-plus"></i> Add Spot(s)
-            </a>
-        </div>
-
-        <a href="{{ url_for('admin_dashboard', user_id=session['user_id']) }}" class="btn-back">← Back to Dashboard</a>
-    </div>
-</div>
-{% endblock content %}

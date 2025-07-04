@@ -68,7 +68,7 @@ def user_login_post():
         flash('Invalid username or password', 'danger')
         return render_template('user_login.html')
     
-    session['user_id'] = user.id  # Store user ID in session
+    session['user_id'] = user.id  
     flash('Login successful!', 'success')
     return redirect(url_for('user_dashboard', user_id=user.id))
 
@@ -92,7 +92,7 @@ def admin_login_post():
         flash('Invalid username or password', 'danger')
         return render_template('admin_login.html')
     
-    session['user_id'] = user.id  # Store admin user ID in session
+    session['user_id'] = user.id
     flash('Admin login successful!', 'success')
     return redirect(url_for('admin_dashboard', user_id=user.id))
 
@@ -226,7 +226,7 @@ def add_parking_lot_post():
         flash("Invalid input for price or maximum spots", "danger")
         return render_template('add_parking_lot.html')
 
-    # Create new parking lot
+
     parking_lot = Parking_Lot(
         prime_location_name=prime_location_name,
         address=address,
@@ -235,12 +235,12 @@ def add_parking_lot_post():
         maximum_spots=maximum_spots
     )
     db.session.add(parking_lot)
-    db.session.commit()  # Commit first to get lot.id
+    db.session.commit()  
 
-    # Automatically create 80% of max spots (rounded down)
+    
     auto_spots = int(maximum_spots * 0.8)
     for _ in range(auto_spots):
-        spot = Parking_Spot(lot_id=parking_lot.id, status='A')  # 'A' for Available
+        spot = Parking_Spot(lot_id=parking_lot.id, status='A')  
         db.session.add(spot)
     db.session.commit()
 
@@ -313,7 +313,7 @@ def delete_parking_lot(lot_id):
     # Delete all spots related to the lot
     Parking_Spot.query.filter_by(lot_id=lot_id).delete()
 
-    # Delete the parking lot
+
     db.session.delete(parking_lot)
     db.session.commit()
 
@@ -359,7 +359,7 @@ def add_parking_spot(lot_id):
                 return render_template('add_parking_spot.html', parking_lot=parking_lot)
 
             for _ in range(num_spots):
-                new_spot = Parking_Spot(lot_id=lot_id, status='A')  # Default to available
+                new_spot = Parking_Spot(lot_id=lot_id, status='A')  
                 db.session.add(new_spot)
 
             db.session.commit()
@@ -547,7 +547,7 @@ def book_parking_spot(lot_id):
             flash("Selected spot is no longer available.", "danger")
             return redirect(url_for('user_dashboard', user_id=user.id))
 
-        # Reserve spot
+        
         spot.status = 'R'
         db.session.commit()
 
@@ -601,7 +601,7 @@ def release_parking_spot(reservation_id):
     ist = pytz.timezone("Asia/Kolkata")
     current_time = datetime.now(ist)
 
-    # Convert reservation.start_time to timezone-aware if it's naive
+    
     if reservation.start_time.tzinfo is None or reservation.start_time.tzinfo.utcoffset(reservation.start_time) is None:
         start_time_aware = ist.localize(reservation.start_time)
     else:
@@ -653,7 +653,7 @@ def reservation_history(user_id):
     ist = pytz.timezone("Asia/Kolkata")
     now_ist = datetime.now(ist)
 
-    # Convert naive start times to timezone-aware
+    
     for res in all_reservations:
         if res.start_time.tzinfo is None:
             res.start_time = ist.localize(res.start_time)

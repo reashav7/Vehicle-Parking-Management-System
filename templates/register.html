@@ -5,6 +5,36 @@
 {% endblock title %}
 
 {% block content %}
+
+
+<div class="container d-flex justify-content-center align-items-center register-container">
+    <div class="register-card text-center">
+        <h2 class="form-title mb-4">Create New Account</h2>
+        <form method="POST" action="">
+            <div class="mb-3 text-start">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" name="name" id="name" required>
+            </div>
+            <div class="mb-3 text-start">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" name="username" id="username" required>
+            </div>
+            <div class="mb-3 text-start">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" name="password" id="password" required>
+            </div>
+            <div class="mb-4 text-start">
+                <label for="confirm_password" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" name="confirm_password" id="confirm_password" required>
+            </div>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-register">Register</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
 <style>
     body {
         background: linear-gradient(to right, #D2C1B6, #F9F3EF);
@@ -70,31 +100,4 @@
         color: #F9F3EF;
     }
 </style>
-
-<div class="container d-flex justify-content-center align-items-center register-container">
-    <div class="register-card text-center">
-        <h2 class="form-title mb-4">Create New Account</h2>
-        <form method="POST" action="">
-            <div class="mb-3 text-start">
-                <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control" name="name" id="name" required>
-            </div>
-            <div class="mb-3 text-start">
-                <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" name="username" id="username" required>
-            </div>
-            <div class="mb-3 text-start">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" name="password" id="password" required>
-            </div>
-            <div class="mb-4 text-start">
-                <label for="confirm_password" class="form-label">Confirm Password</label>
-                <input type="password" class="form-control" name="confirm_password" id="confirm_password" required>
-            </div>
-            <div class="d-grid">
-                <button type="submit" class="btn btn-register">Register</button>
-            </div>
-        </form>
-    </div>
-</div>
 {% endblock content %}

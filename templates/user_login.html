@@ -5,6 +5,29 @@
 {% endblock title %}
 
 {% block content %}
+
+
+<div class="container d-flex justify-content-center align-items-center login-container">
+    <div class="login-card text-center">
+        <h2 class="form-title mb-4">User Login</h2>
+        <form method="POST" action="{{ url_for('user_login') }}">
+            <div class="mb-3 text-start">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" name="username" id="username" required>
+            </div>
+            <div class="mb-4 text-start">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" name="password" id="password" required>
+            </div>
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-login">Log In</button>
+                <a href="{{ url_for('register') }}" class="btn btn-register">Create New Account</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
 <style>
     body {
         background: linear-gradient(to right, #D2C1B6, #F9F3EF);
@@ -85,24 +108,4 @@
         background-color: #bfa598;
     }
 </style>
-
-<div class="container d-flex justify-content-center align-items-center login-container">
-    <div class="login-card text-center">
-        <h2 class="form-title mb-4">User Login</h2>
-        <form method="POST" action="{{ url_for('user_login') }}">
-            <div class="mb-3 text-start">
-                <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" name="username" id="username" required>
-            </div>
-            <div class="mb-4 text-start">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" name="password" id="password" required>
-            </div>
-            <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-login">Log In</button>
-                <a href="{{ url_for('register') }}" class="btn btn-register">Create New Account</a>
-            </div>
-        </form>
-    </div>
-</div>
 {% endblock content %}

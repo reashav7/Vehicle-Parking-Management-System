@@ -6,6 +6,40 @@
     {% include 'admin_navbar.html' %}
 {% endblock navbar %}
 
+
+{% block content %}
+<div class="container users-container">
+    <div class="users-card">
+        <h2>Registered Users</h2>
+        <table class="user-table">
+            <thead>
+                <tr>
+                    <th>Sl. No.</th>
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Admin</th>
+                    <th>Vehicle Numbers</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ 'Yes' if user.is_admin else 'No' }}</td>
+                    <td>{{ user.vehicle_numbers }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="{{ url_for('admin_dashboard', user_id=session['user_id']) }}" class="btn-back">← Back to Dashboard</a>
+    </div>
+</div>
+{% endblock content %}
+
+
 {% block style %}
 <style>
     body {
@@ -75,35 +109,3 @@
     }
 </style>
 {% endblock style %}
-
-{% block content %}
-<div class="container users-container">
-    <div class="users-card">
-        <h2>Registered Users</h2>
-        <table class="user-table">
-            <thead>
-                <tr>
-                    <th>Sl. No.</th>
-                    <th>Name</th>
-                    <th>Username</th>
-                    <th>Admin</th>
-                    <th>Vehicle Numbers</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                <tr>
-                    <td>{{ loop.index }}</td>
-                    <td>{{ user.name }}</td>
-                    <td>{{ user.username }}</td>
-                    <td>{{ 'Yes' if user.is_admin else 'No' }}</td>
-                    <td>{{ user.vehicle_numbers }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
-        <a href="{{ url_for('admin_dashboard', user_id=session['user_id']) }}" class="btn-back">← Back to Dashboard</a>
-    </div>
-</div>
-{% endblock content %}

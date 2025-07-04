@@ -5,6 +5,18 @@
 {% endblock title %}
 
 {% block content %}
+
+<div class="container d-flex justify-content-center align-items-center landing-container">
+    <div class="custom-card text-center">
+        <h2 class="app-title mb-4">Vehicle Parking App</h2>
+        <p class="text-muted mb-4">Please select your login type</p>
+        <div class="d-grid gap-3">
+            <a href="{{ url_for('user_login') }}" class="btn btn-custom btn-user">User Login</a>
+            <a href="{{ url_for('admin_login') }}" class="btn btn-custom btn-admin">Admin Login</a>
+        </div>
+    </div>
+</div>
+
 <style>
     body {
         background: linear-gradient(to right, #D2C1B6, #F9F3EF);
@@ -67,14 +79,5 @@
     }
 </style>
 
-<div class="container d-flex justify-content-center align-items-center landing-container">
-    <div class="custom-card text-center">
-        <h2 class="app-title mb-4">Vehicle Parking App</h2>
-        <p class="text-muted mb-4">Please select your login type</p>
-        <div class="d-grid gap-3">
-            <a href="{{ url_for('user_login') }}" class="btn btn-custom btn-user">User Login</a>
-            <a href="{{ url_for('admin_login') }}" class="btn btn-custom btn-admin">Admin Login</a>
-        </div>
-    </div>
-</div>
+
 {% endblock content %}
